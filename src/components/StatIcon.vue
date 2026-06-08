@@ -4,7 +4,7 @@
       <img :src="src" :alt="stat.name" class="ability-icon" />
       <img
         v-if="special"
-        src="/src/assets/abilities/special.png"
+        :src="specialIcon"
         class="special-badge"
         alt="special"
       />
@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import { type PokemonStatData } from "../types/models";
+import specialIcon from "../assets/abilities/special.png";
 
 withDefaults(defineProps<{
   stat: PokemonStatData;

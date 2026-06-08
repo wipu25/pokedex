@@ -8,7 +8,7 @@
           <img
             v-for="el in element"
             :key="el"
-            :src="`/src/assets/element/${el}_type_element.png`"
+            :src="elementIcon(el)"
             :alt="el"
             class="element-icon"
           />
@@ -31,8 +31,8 @@
         />
       </div>
       <div class="hw-row">
-        <StatIcon :stat="{ name: 'height', value: height }" src="/src/assets/abilities/height.png" large />
-        <StatIcon :stat="{ name: 'weight', value: weight }" src="/src/assets/abilities/weight.png" large />
+        <StatIcon :stat="{ name: 'height', value: height }" :src="heightIcon" large />
+        <StatIcon :stat="{ name: 'weight', value: weight }" :src="weightIcon" large />
       </div>
     </div>
   </Card>
@@ -44,16 +44,26 @@ import { useFavoritesStore } from "../stores/favorites";
 import { type PokemonCardData } from "../types/models";
 import Card from "./Card.vue";
 import StatIcon from "./StatIcon.vue";
+import hpIcon from "../assets/abilities/hp.png";
+import attackIcon from "../assets/abilities/attack.png";
+import defenseIcon from "../assets/abilities/defense.png";
+import speedIcon from "../assets/abilities/speed.png";
+import heightIcon from "../assets/abilities/height.png";
+import weightIcon from "../assets/abilities/weight.png";
 
 const props = defineProps<PokemonCardData>();
 
+function elementIcon(el: string): string {
+  return new URL(`../assets/element/${el}_type_element.png`, import.meta.url).href;
+}
+
 const STAT_ICONS: Record<string, string> = {
-  Hp: "/src/assets/abilities/hp.png",
-  Attack: "/src/assets/abilities/attack.png",
-  Defense: "/src/assets/abilities/defense.png",
-  Speed: "/src/assets/abilities/speed.png",
-  "Special Attack": "/src/assets/abilities/attack.png",
-  "Special Defense": "/src/assets/abilities/defense.png",
+  Hp: hpIcon,
+  Attack: attackIcon,
+  Defense: defenseIcon,
+  Speed: speedIcon,
+  "Special Attack": attackIcon,
+  "Special Defense": defenseIcon,
 };
 
 const SPECIAL_STATS = new Set(["Special Attack", "Special Defense"]);

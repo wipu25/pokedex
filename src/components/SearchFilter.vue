@@ -3,6 +3,10 @@ import { ref } from "vue";
 import type { Type, Habitat } from "../types/api";
 import { StatsData, MinMax } from "@/types/models";
 
+function elementIcon(name: string): string {
+  return new URL(`../assets/element/${name}_type_element.png`, import.meta.url).href;
+}
+
 const props = defineProps<{
   filterType: Type[];
   habitats: Habitat[];
@@ -121,7 +125,7 @@ function onStatApply() {
       }"
     >
       <img
-        :src="`/src/assets/element/${t.name}_type_element.png`"
+        :src="elementIcon(t.name)"
         :alt="t.name"
         class="type-icon"
       />
