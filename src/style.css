@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+:root {
+  --color-primary: #3B4CCA;
+  --color-secondary: #FF0000;
+  --color-darker-primary: #CC0000;
+  --color-tertiary: #FFDE00;
+  --color-darker-tertiary: #B3A125;
+}
+
+.center-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu {
+  padding: 8px 16px;
+  border-radius: 16px;
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+
+.menu:hover {
+  background-color: var(--color-darker-tertiary);
+}
