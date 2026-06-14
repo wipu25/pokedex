@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import PokemonCard from "../components/PokemonCard.vue";
+import PokemonCard from "../components/pokemonCard/PokemonCard.vue";
 import SearchFilter from "../components/SearchFilter.vue";
 import { usePokemon } from "../composables/usePokemon";
 import type { PokemonCardData } from "../types/models";
@@ -16,6 +16,7 @@ const {
   onSelectedType,
   onSelectedHabitat,
   onUpdateStats,
+  onClearAll,
 } = usePokemon();
 
 const router = useRouter();
@@ -36,7 +37,9 @@ function goToDetail(pokemon: PokemonCardData) {
       @selected-type="onSelectedType"
       @selected-habitat="onSelectedHabitat"
       @update-stats="onUpdateStats"
+      @clear-all="onClearAll"
     />
+    <div v-if="!loading" class="result-count">{{ pokemons.length }} results</div>
     <div class="grid">
       <PokemonCard
         v-for="pokemon in pokemons"
@@ -59,6 +62,13 @@ function goToDetail(pokemon: PokemonCardData) {
   display: flex;
   flex-direction: column;
   padding: 20px 40px;
+}
+
+.result-count {
+  font-size: 13px;
+  color: var(--color-text-light);
+  margin-bottom: 12px;
+  text-align: right;
 }
 
 .grid {

@@ -1,7 +1,18 @@
+@font-face {
+  font-family: 'DMSans';
+  src: url('./assets/fonts/DMSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: inherit;
+}
+
+body {
+  font-family: 'DMSans', sans-serif;
 }
 
 #app {
@@ -11,11 +22,60 @@
 }
 
 :root {
+  /* Brand */
   --color-primary: #3B4CCA;
   --color-secondary: #FF0000;
   --color-darker-primary: #CC0000;
   --color-tertiary: #FFDE00;
   --color-darker-tertiary: #B3A125;
+
+  /* Neutral */
+  --color-white: #ffffff;
+  --color-surface: #f7f7f9;
+  --color-border: #e8e8ee;
+  --color-separator: #ddd;
+  --color-divider: #f0f0f3;
+  --color-track: #eee;
+  --color-text: #1a1a2e;
+  --color-text-strong: #333;
+  --color-text-muted: #555;
+  --color-text-light: #888;
+  --color-text-placeholder: #aaa;
+
+  /* Overlays (white on colored backgrounds) */
+  --color-overlay-sm: rgba(255, 255, 255, 0.2);
+  --color-overlay-md: rgba(255, 255, 255, 0.35);
+  --color-overlay-text: rgba(255, 255, 255, 0.75);
+  --color-overlay-dim: rgba(255, 255, 255, 0.6);
+
+  /* Accent */
+  --color-star: #FFD700;
+  --color-star-glow: rgba(255, 215, 0, 0.6);
+  --color-primary-tint: rgba(59, 76, 202, 0.1);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.12);
+  --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.18);
+  --shadow-ring: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-btn: 0 1px 4px rgba(0, 0, 0, 0.1);
+  --shadow-chip-colored: 0 3px 10px rgba(0, 0, 0, 0.2);
+  --shadow-navbar: 0 2px 12px rgba(59, 76, 202, 0.35);
+  --shadow-primary-sm: 0 2px 6px rgba(59, 76, 202, 0.3);
+  --shadow-primary-md: 0 4px 12px rgba(59, 76, 202, 0.3);
+
+  /* Navbar search (on primary background) */
+  --color-nav-search-bg: rgba(255, 255, 255, 0.15);
+  --color-nav-search-border: rgba(255, 255, 255, 0.3);
+  --color-nav-search-focus-bg: rgba(255, 255, 255, 0.25);
+  --color-nav-search-focus-border: rgba(255, 255, 255, 0.6);
+  --color-nav-search-icon: rgba(255, 255, 255, 0.7);
+  --color-nav-search-placeholder: rgba(255, 255, 255, 0.55);
+  --color-nav-clear-bg: rgba(255, 255, 255, 0.2);
+  --color-nav-clear-text: rgba(255, 255, 255, 0.8);
+  --color-nav-clear-hover-bg: rgba(255, 255, 255, 0.35);
 }
 
 .center-screen {

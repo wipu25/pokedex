@@ -13,8 +13,8 @@ const routes = [
     children: [
       { path: "", component: StartScreen },
       { path: "pokemon", component: PokemonScreen },
-      { path: "product", component: ProductScreen },
-      { path: "item", component: ItemScreen },
+      // { path: "product", component: ProductScreen },
+      // { path: "item", component: ItemScreen },
     ],
   },
   { path: "/pokemon/:id", component: PokemonDetailScreen },

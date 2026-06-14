@@ -9,7 +9,7 @@ export interface PokemonCardData {
   name: string;
   element: Element[];
   height: string;
-  weight: string;
+  weight: number;
   stats: PokemonStatData[];
 }
 
@@ -40,6 +40,7 @@ export enum MinMax {
 }
 
 export enum Element {
+  ALL = "All",
   BUG = "bug",
   DARK = "dark",
   DRAGON = "dragon",

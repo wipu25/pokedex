@@ -7,27 +7,30 @@ const route = useRoute();
 const router = useRouter();
 const isPokemonRoute = computed(() => route.path === "/pokemon");
 
+const VALID_SEARCH_RE = /[^a-zA-Z0-9-]/g;
+
 function onSearch(e) {
-  const q = e.target.value;
+  const raw = e.target.value;
+  const q = raw.replace(VALID_SEARCH_RE, "");
+  if (q !== raw) e.target.value = q;
   router.replace({ query: q ? { q } : {} });
 }
 
 function clearSearch() {
-  router.replace({ query: { } });
+  router.replace({ query: {} });
 }
 </script>
 
 <template>
   <nav class="navbar">
     <RouterLink to="/">
-      <img
-        class="logo"
-        src="../assets/pokemonLogo.png"
-        alt="logo"
-        height="40"
-      />
+      <img class="logo" src="../assets/pokemonLogo.png" alt="logo" height="40" />
     </RouterLink>
+
     <div v-if="isPokemonRoute" class="search-bar">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+      </svg>
       <input
         class="search-input"
         type="text"
@@ -37,51 +40,49 @@ function clearSearch() {
       />
       <button v-if="route.query.q" class="clear-btn" @click="clearSearch">✕</button>
     </div>
+
     <div class="menu-section">
-      <RouterLink class="menu" to="/pokemon" @click="showDropdown = false"
-        >Pokemon</RouterLink
-      >
-      <RouterLink class="menu" to="/item" @click="showDropdown = false"
-        >Item</RouterLink
-      >
-      <div class="dropdown-wrapper">
-        <button class="menu" @click="showDropdown = !showDropdown">
-          Product
-        </button>
+      <RouterLink class="menu" to="/pokemon" @click="showDropdown = false">Pokemon</RouterLink>
+      <!-- <RouterLink class="menu" to="/item" @click="showDropdown = false">Item</RouterLink> -->
+      <!-- <div class="dropdown-wrapper">
+        <button class="menu" @click="showDropdown = !showDropdown">Product</button>
         <div v-if="showDropdown" class="dropdown">
           <a class="dropdown-item" href="#">Product 1</a>
           <a class="dropdown-item" href="#">Product 2</a>
           <a class="dropdown-item" href="#">Product 3</a>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
     </div>
   </nav>
 </template>
 
 <style scoped>
 .navbar {
-  padding: 16px;
+  padding: 0 24px;
   display: flex;
-  flex-direction: row;
-  height: 80px;
+  height: 64px;
   background-color: var(--color-primary);
   align-items: center;
   justify-content: space-between;
+  box-shadow: var(--shadow-navbar);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .menu-section {
   display: flex;
-  gap: 20px;
+  gap: 4px;
   align-items: center;
 }
 
 .router-link-exact-active.menu {
   background-color: var(--color-tertiary);
-  color: var(--color-secondary);
+  color: var(--color-text);
 }
 
 .router-link-exact-active.menu:hover {
-  background-color: var(--color-tertiary);
+  background-color: var(--color-darker-tertiary);
 }
 
 .dropdown-wrapper {
@@ -90,41 +91,53 @@ function clearSearch() {
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
-  background-color: var(--color-cream);
-  border: 1px solid var(--color-light-brown);
-  border-radius: 8px;
+  background: var(--color-white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
-  min-width: 140px;
+  min-width: 150px;
   z-index: 10;
 }
 
 .dropdown-item {
   display: block;
   padding: 10px 16px;
-  color: var(--color-darker-green);
+  color: var(--color-text-muted);
   text-decoration: none;
   font-size: 14px;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s;
 }
 
 .dropdown-item:hover {
-  background-color: var(--color-light-brown);
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: white;
+  background: var(--color-nav-search-bg);
+  border: 1.5px solid var(--color-nav-search-border);
   border-radius: 999px;
-  overflow: hidden;
-  height: 90%;
-  padding: 4px 4px 4px 14px;
-  gap: 4px;
+  height: 40px;
+  padding: 0 6px 0 14px;
+  gap: 8px;
   flex: 1;
-  margin: 0 24px;
+  margin: 0 32px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.search-bar:focus-within {
+  background: var(--color-nav-search-focus-bg);
+  border-color: var(--color-nav-search-focus-border);
+}
+
+.search-icon {
+  color: var(--color-nav-search-icon);
+  flex-shrink: 0;
 }
 
 .search-input {
@@ -133,27 +146,31 @@ function clearSearch() {
   font-size: 0.9rem;
   flex: 1;
   background: transparent;
-  color: var(--color-darker-green);
+  color: var(--color-white);
 }
 
 .search-input::placeholder {
-  color: #aaa;
+  color: var(--color-nav-search-placeholder);
 }
 
 .clear-btn {
-  background: none;
+  background: var(--color-nav-clear-bg);
   border: none;
   cursor: pointer;
-  color: #aaa;
-  font-size: 0.85rem;
-  padding: 4px 8px;
+  color: var(--color-nav-clear-text);
+  font-size: 0.75rem;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  line-height: 1;
-  transition: color 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
 }
 
 .clear-btn:hover {
-  color: var(--color-darker-green);
-  background-color: #eee;
+  background: var(--color-nav-clear-hover-bg);
+  color: var(--color-white);
 }
 </style>
