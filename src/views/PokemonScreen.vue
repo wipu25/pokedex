@@ -17,6 +17,7 @@ const {
   onSelectedHabitat,
   onUpdateStats,
   onClearAll,
+  totalCount,
 } = usePokemon();
 
 const router = useRouter();
@@ -39,7 +40,7 @@ function goToDetail(pokemon: PokemonCardData) {
       @update-stats="onUpdateStats"
       @clear-all="onClearAll"
     />
-    <div v-if="!loading" class="result-count">{{ pokemons.length }} results</div>
+    <div v-if="!loading" class="result-count">{{ totalCount }} results</div>
     <div class="grid">
       <PokemonCard
         v-for="pokemon in pokemons"

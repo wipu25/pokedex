@@ -11,6 +11,7 @@ export function usePokemon() {
 
   let fetchPokemonsList: PokemonCardData[] = [];
   const pokemons = ref<PokemonCardData[]>([]);
+  const totalCount = ref<number>(0);
   let offset = 0;
   const loading = ref<boolean>(false);
   const hasMore = ref<boolean>(true);
@@ -29,6 +30,7 @@ export function usePokemon() {
     }
 
     fetchPokemonsList = result.filter((p) => matchesStatFilters(p, filter.stats.value));
+    totalCount.value = fetchPokemonsList.length;
     offset = 0;
     pokemons.value = fetchPokemonsList.slice(0, 18);
     offset = 18;
@@ -77,6 +79,7 @@ export function usePokemon() {
   return {
     ...filter,
     pokemons,
+    totalCount,
     loading,
   };
 }
