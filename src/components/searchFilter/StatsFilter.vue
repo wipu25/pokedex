@@ -20,8 +20,8 @@ function formatStatKey(key: string): string {
     attack: "Attack",
     defense: "Defense",
     speed: "Speed",
-    special_attack: "Sp. Atk",
-    special_defense: "Sp. Def",
+    special_attack: "Special Attack",
+    special_defense: "Special Defense",
     height: "Height",
   };
   return map[key] ?? capitalize(key);
