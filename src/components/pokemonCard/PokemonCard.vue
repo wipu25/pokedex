@@ -19,7 +19,7 @@
 
       <div class="type-badges">
         <span
-          v-for="el in element"
+          v-for="el in types"
           :key="el"
           class="type-badge"
           :style="{ backgroundColor: getElementColor(String(el)) }"
@@ -30,7 +30,7 @@
       </div>
 
       <PokemonStat :stats="stats" />
-      <PokemonSize :height="height" :weight="weight" />
+      <InfoRow :infoRowList="[{ label: 'Height', value: height }, { label: 'Weight', value: weight }]" />
     </div>
   </div>
 </template>
@@ -38,15 +38,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useFavoritesStore } from "../../stores/favorites";
-import { type PokemonCardData } from "../../types/models";
+import { type Pokemon } from "../../types/models";
 import { getElementColor } from "../../utils/color";
 import { elementIcon } from "../../utils/asset";
 import PokemonStat from "./PokemonStat.vue";
-import PokemonSize from "./PokemonSize.vue";
+import InfoRow from "./InfoRow.vue";
 
-const props = defineProps<PokemonCardData>();
+const props = defineProps<Pokemon>();
 
-const typeColor = computed(() => getElementColor(String(props.element[0])));
+const typeColor = computed(() => getElementColor(String(props.types[0])));
 
 const typeColorLight = computed(() => {
   const hex = typeColor.value.replace("#", "");

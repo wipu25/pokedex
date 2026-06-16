@@ -1,16 +1,28 @@
 import { ref, watch, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { usePokemonFilter } from "./usePokemonFilter";
-import { fetchPokemons, fetchHabitatPokemons, matchesStatFilters } from "../usecases/pokemon";
+import {
+  fetchPokemons,
+  fetchHabitatPokemons,
+  matchesStatFilters,
+} from "../usecases/pokemon";
+import { mapToPokemon } from "../services/pokemon";
 import { Element } from "../types/models";
-import type { PokemonCardData } from "../types/models";
+import type { Pokemon } from "../types/models";
+import type { PokemonDetail } from "../types/api";
+
+const detailCache = new Map<number, PokemonDetail>();
+
+export function getCachedPokemon(id: number): PokemonDetail | undefined {
+  return detailCache.get(id);
+}
 
 export function usePokemon() {
   const route = useRoute();
   const filter = usePokemonFilter();
 
-  let fetchPokemonsList: PokemonCardData[] = [];
-  const pokemons = ref<PokemonCardData[]>([]);
+  let fetchedList: Pokemon[] = [];
+  const pokemons = ref<Pokemon[]>([]);
   const totalCount = ref<number>(0);
   let offset = 0;
   const loading = ref<boolean>(false);
@@ -20,28 +32,32 @@ export function usePokemon() {
     loading.value = true;
     const query = route.query.q as string | null;
 
-    let result =
+    const raw =
       filter.habitat.value !== "All"
         ? await fetchHabitatPokemons(query, filter.habitat.value)
         : await fetchPokemons(query);
 
+    raw.forEach((d) => detailCache.set(d.id, d));
+
+    let result = raw.map(mapToPokemon);
+
     if (filter.type.value !== Element.ALL) {
-      result = result.filter((p) => p.element.includes(filter.type.value));
+      result = result.filter((p) => p.types.includes(filter.type.value));
     }
 
-    fetchPokemonsList = result.filter((p) => matchesStatFilters(p, filter.stats.value));
-    totalCount.value = fetchPokemonsList.length;
+    fetchedList = result.filter((p) =>
+      matchesStatFilters(p, filter.stats.value),
+    );
+    totalCount.value = fetchedList.length;
     offset = 0;
-    pokemons.value = fetchPokemonsList.slice(0, 18);
+    pokemons.value = fetchedList.slice(0, 18);
     offset = 18;
     loading.value = false;
   }
 
-  watch(
-    [filter.type, filter.habitat, filter.stats],
-    () => fetchPokemon(),
-    { deep: true },
-  );
+  watch([filter.type, filter.habitat, filter.stats], () => fetchPokemon(), {
+    deep: true,
+  });
 
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -62,7 +78,7 @@ export function usePokemon() {
     const nearBottom =
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
     if (nearBottom) {
-      pokemons.value.push(...fetchPokemonsList.slice(offset, offset + 18));
+      pokemons.value.push(...fetchedList.slice(offset, offset + 18));
       offset += 18;
     }
   }

@@ -1,17 +1,16 @@
 import { getPokemonList, getPokemonDetail, getHabitatDetail, getPokemonSpecies } from "../services/api";
-import { mapToCardData } from "../services/pokemon";
-import type { PokemonCardData, StatsData } from "../types/models";
+import type { PokemonDetail } from "../types/api";
+import type { Pokemon, StatsData } from "../types/models";
 
-export async function fetchPokemons(query: string | null): Promise<PokemonCardData[]> {
+export async function fetchPokemons(query: string | null): Promise<PokemonDetail[]> {
   const listData = await getPokemonList();
   const results = query
     ? listData.results.filter((p) => p.name.includes(query.toLowerCase()))
     : listData.results;
-  const details = await Promise.all(results.map((p) => getPokemonDetail(p.url)));
-  return details.map(mapToCardData);
+  return Promise.all(results.map((p) => getPokemonDetail(p.url)));
 }
 
-export async function fetchHabitatPokemons(query: string | null, habitat: string): Promise<PokemonCardData[]> {
+export async function fetchHabitatPokemons(query: string | null, habitat: string): Promise<PokemonDetail[]> {
   const habitatDetail = await getHabitatDetail(habitat.toLowerCase());
   const speciesList = await Promise.all(
     habitatDetail.pokemon_species.map((s) => getPokemonSpecies(s.name))
@@ -20,11 +19,10 @@ export async function fetchHabitatPokemons(query: string | null, habitat: string
     .flatMap((s) => s.varieties.map((v) => v.pokemon))
     .filter((p) => !query || p.name.includes(query.toLowerCase()))
     .map((p) => p.url);
-  const details = await Promise.all(pokemonUrls.map((url) => getPokemonDetail(url)));
-  return details.map(mapToCardData);
+  return Promise.all(pokemonUrls.map((url) => getPokemonDetail(url)));
 }
 
-export function matchesStatFilters(pokemon: PokemonCardData, stats: StatsData): boolean {
+export function matchesStatFilters(pokemon: Pokemon, stats: StatsData): boolean {
   return (Object.keys(stats) as (keyof StatsData)[]).every((key) => {
     const range = stats[key];
     if (range.min == null && range.max == null) return true;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { PokemonDetail, ListResponse, Type, Habitat, HabitatDetail, PokemonSpecies } from "../types/api";
+import type { PokemonDetail, ListResponse, Type, Habitat, HabitatDetail, PokemonSpecies, PokemonMoveData, PokemonAbilityApiData, PokemonItemApiData } from "../types/api";
 
 const api = axios.create({
   baseURL: "https://pokeapi.co/api/v2",
@@ -25,3 +25,12 @@ export const getHabitatDetail = (name: string): Promise<HabitatDetail> =>
 
 export const getPokemonSpecies = (name: string): Promise<PokemonSpecies> =>
   api.get(`/pokemon-species/${name}`).then((res) => res.data);
+
+export const getMove = (id: number): Promise<PokemonMoveData> =>
+  api.get(`/move/${id}`).then((res) => res.data);
+
+export const getAbility = (id: number): Promise<PokemonAbilityApiData> =>
+  api.get(`/ability/${id}`).then((res) => res.data);
+
+export const getItem = (name: string): Promise<PokemonItemApiData> =>
+  api.get(`/item/${name}`).then((res) => res.data);

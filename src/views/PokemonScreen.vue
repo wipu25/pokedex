@@ -3,7 +3,6 @@ import { useRouter } from "vue-router";
 import PokemonCard from "../components/pokemonCard/PokemonCard.vue";
 import SearchFilter from "../components/SearchFilter.vue";
 import { usePokemon } from "../composables/usePokemon";
-import type { PokemonCardData } from "../types/models";
 
 const {
   filterType,
@@ -22,8 +21,8 @@ const {
 
 const router = useRouter();
 
-function goToDetail(pokemon: PokemonCardData) {
-  router.push({ path: `/pokemon/${pokemon.id}`, state: { pokemon: JSON.parse(JSON.stringify(pokemon)) } });
+function goToDetail(id: number) {
+  router.push(`/pokemon/${id}`);
 }
 </script>
 
@@ -47,7 +46,7 @@ function goToDetail(pokemon: PokemonCardData) {
         :key="pokemon.name"
         v-bind="pokemon"
         style="cursor: pointer"
-        @click="goToDetail(pokemon)"
+        @click="goToDetail(pokemon.id)"
       />
     </div>
     <div v-if="pokemons.length === 0 && loading == false" class="no-results">

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { getPokemonList, getPokemonDetail, getItemList } from "../services/api";
-import { mapToCardData, mapToItemData } from "../services/pokemon";
-import type { ItemData, PokemonCardData } from "../types/models";
+import type { ItemData } from "../types/models";
 import ItemCard from "@/components/ItemCard.vue";
 
 const itemData = ref<ItemData[]>([]);
@@ -22,7 +21,7 @@ async function fetchPokemons(): Promise<void> {
     return;
   }
 
-  itemData.value.push(...listData.map(mapToItemData));
+  // itemData.value.push(...listData.map(mapToItemData));
 
   offset.value += 20;
   loading.value = false;
@@ -30,7 +29,8 @@ async function fetchPokemons(): Promise<void> {
 
 function onScroll() {
   if (!hasMore.value) return;
-  const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+  const nearBottom =
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
   if (nearBottom) fetchPokemons();
 }
 
@@ -44,6 +44,9 @@ onUnmounted(() => {
 });
 </script>
 
-<template> 
-    <ItemCard img_url="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" name="Master Ball" />
+<template>
+  <ItemCard
+    img_url="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
+    name="Master Ball"
+  />
 </template>

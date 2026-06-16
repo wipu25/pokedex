@@ -1,16 +1,66 @@
+export interface InfoRowData {
+  label: string;
+  value: string | number;
+}
+
 export interface PokemonStatData {
   name: string;
   value: number | string;
 }
 
-export interface PokemonCardData {
+export interface Pokemon {
   id: number;
-  image: string;
   name: string;
-  element: Element[];
+  image: string;
+  types: Element[];
+  abilities: string[];
   height: string;
   weight: number;
   stats: PokemonStatData[];
+}
+
+export interface HeldItemData {
+  id: number;
+  name: string;
+  image: string | null;
+  effect: string;
+  flingPower: number | null;
+  flingEffect: string | null;
+}
+
+export interface AbilityData {
+  id: number;
+  name: string;
+  isHidden: boolean;
+  effect: string;
+}
+
+export interface MoveData {
+  id: number;
+  name: string;
+  type: string;
+  damageClass: string;
+  power: number | null;
+  accuracy: number | null;
+  pp: number;
+  priority: number;
+  shortEffect: string;
+  target: string;
+}
+
+export interface PokemonSpritesData {
+  front_default: string | null;
+  front_shiny: string | null;
+  back_default: string | null;
+  back_shiny: string | null;
+}
+
+export interface PokemonDetail extends Pokemon {
+  baseExperience: number;
+  heldItems: string[];
+  abilities: string[];
+  cry: string;
+  sprites: PokemonSpritesData;
 }
 
 export interface ItemData {

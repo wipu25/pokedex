@@ -1,23 +1,22 @@
 <template>
-  <div class="hw-row">
-    <div class="hw-item">
-      <span class="hw-label">Height</span>
-      <span class="hw-value">{{ height }}</span>
-    </div>
-    <div class="hw-sep"></div>
-    <div class="hw-item">
-      <span class="hw-label">Weight</span>
-      <span class="hw-value">{{ weight }}</span>
-    </div>
+  <div class="info-row">
+    <template v-for="(item, i) in infoRowList" :key="item.label">
+      <div class="info-sep" v-if="i > 0" />
+      <div class="info-item">
+        <span class="info-label">{{ item.label }}</span>
+        <span class="info-value">{{ item.value }}</span>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{ height: string; weight: number }>();
+import type { InfoRowData } from "../../types/models";
+defineProps<{ infoRowList: InfoRowData[] }>();
 </script>
 
 <style scoped>
-.hw-row {
+.info-row {
   display: flex;
   align-items: center;
   background: var(--color-surface);
@@ -27,7 +26,7 @@ defineProps<{ height: string; weight: number }>();
   margin-top: 4px;
 }
 
-.hw-item {
+.info-item {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -36,13 +35,13 @@ defineProps<{ height: string; weight: number }>();
   gap: 2px;
 }
 
-.hw-sep {
+.info-sep {
   width: 1px;
   height: 32px;
   background: var(--color-separator);
 }
 
-.hw-label {
+.info-label {
   font-size: 11px;
   color: var(--color-text-placeholder);
   font-weight: 600;
@@ -50,7 +49,7 @@ defineProps<{ height: string; weight: number }>();
   letter-spacing: 0.5px;
 }
 
-.hw-value {
+.info-value {
   font-size: 14px;
   font-weight: 800;
   color: var(--color-text-strong);
