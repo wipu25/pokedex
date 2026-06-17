@@ -3,7 +3,12 @@
     <div v-for="stat in stats" :key="stat.name" class="stat-row">
       <div class="stat-icon-wrap" :data-tooltip="stat.name">
         <img :src="statIcon(stat.name)" :alt="stat.name" class="stat-icon" />
-        <img v-if="stat.name.includes('Special')" :src="specialIcon" alt="special" class="special-badge" />
+        <img
+          v-if="stat.name.includes('Special')"
+          :src="specialIcon"
+          alt="special"
+          class="special-badge"
+        />
       </div>
       <div class="stat-track">
         <div
@@ -20,13 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { type PokemonStatData } from "../../types/models";
-import { STAT_COLORS } from "../../constants/colors";
-import hpIcon from "../../assets/abilities/hp.png";
-import attackIcon from "../../assets/abilities/attack.png";
-import defenseIcon from "../../assets/abilities/defense.png";
-import speedIcon from "../../assets/abilities/speed.png";
-import specialIcon from "../../assets/abilities/special.png";
+import { STAT_COLORS } from "../constants/colors";
+import hpIcon from "../assets/abilities/hp.png";
+import attackIcon from "../assets/abilities/attack.png";
+import defenseIcon from "../assets/abilities/defense.png";
+import speedIcon from "../assets/abilities/speed.png";
+import specialIcon from "../assets/abilities/special.png";
+import { PokemonStatData } from "@/types/models";
 
 defineProps<{ stats: PokemonStatData[] }>();
 
@@ -99,7 +104,7 @@ function statColor(value: number): string {
 }
 
 .stat-icon-wrap::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: calc(100% + 1px);
   left: 50%;
