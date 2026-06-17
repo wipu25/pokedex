@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Habitat } from "../types/api";
-import { type StatsData, MinMax, Element } from "@/types/models";
-import FilterButton from "./searchFilter/FilterButton.vue";
-import TypeFilter from "./searchFilter/TypeFilter.vue";
-import HabitatFilter from "./searchFilter/HabitatFilter.vue";
-import StatsFilter from "./searchFilter/StatsFilter.vue";
+import type { Habitat } from "../../../types/api";
+import { type StatsData, MinMax, Element } from "../../../types/models";
+import FilterButton from "./FilterButton.vue";
+import TypeFilter from "./TypeFilter.vue";
+import HabitatFilter from "./HabitatFilter.vue";
+import StatsFilter from "./StatsFilter.vue";
 
 defineProps<{
   filterType: Element[];

@@ -1,10 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layouts/MainLayout.vue";
 import StartScreen from "../views/StartScreen.vue";
-import PokemonScreen from "../views/PokemonScreen.vue";
-import PokemonDetailScreen from "../views/PokemonDetailScreen.vue";
-import ProductScreen from "../views/ProductScreen.vue";
-import ItemScreen from "@/views/ItemScreen.vue";
+import PokemonScreen from "../views/PokemonScreen/index.vue";
+import PokemonDetailScreen from "../views/PokemonDetail/index.vue";
 
 const routes = [
   {
@@ -13,8 +11,6 @@ const routes = [
     children: [
       { path: "", component: StartScreen },
       { path: "pokemon", component: PokemonScreen },
-      // { path: "product", component: ProductScreen },
-      // { path: "item", component: ItemScreen },
     ],
   },
   { path: "/pokemon/:id", component: PokemonDetailScreen },

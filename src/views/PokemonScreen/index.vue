@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import PokemonCard from "../components/pokemonCard/PokemonCard.vue";
-import SearchFilter from "../components/SearchFilter.vue";
-import { usePokemon } from "../composables/usePokemon";
+import PokemonCard from "./PokemonCard.vue";
+import SearchFilter from "./SearchFilter/index.vue";
+import { usePokemon } from "../../composables/usePokemon";
 
 const {
   filterType,
