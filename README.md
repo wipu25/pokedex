@@ -1,16 +1,16 @@
 # Pokedex
 
-A Pokedex web app built with Vue 3 and Pinia. Browse all Pokemon, filter by type, habitat, and stats, and save your favorites — all powered by the public [PokeAPI](https://pokeapi.co/).
+A Pokemon encyclopedia web app built with Vue 3. Browse, search, and filter all Pokemon using data from the [PokeAPI](https://pokeapi.co/).
 
 ## Features
 
-- **Search** — find Pokemon by name with debounced live search
+- **Search** — find Pokemon by name with live search
 - **Filter by type** — narrow results to a specific Pokemon type (Fire, Water, Grass, etc.)
 - **Filter by habitat** — browse Pokemon that live in caves, forests, seas, and more
 - **Filter by stats** — set min/max ranges for HP, Attack, Defense, Speed, Special Attack, Special Defense, and Height
-- **Infinite scroll** — results load in pages of 18 as you scroll down
-- **Favorites** — heart any Pokemon to save it; view your full favorites list via the nav bar
-- **Detail view** — tap a card to see full stats, types, and info for that Pokemon
+- **Infinite scroll** — results paginate as you scroll
+- **Favorites** — save Pokemon to a favorites list accessible from the nav bar
+- **Detail view** — full stats, sprites, moves, abilities, and held items for each Pokemon
 
 ## Tech Stack
 
@@ -18,8 +18,9 @@ A Pokedex web app built with Vue 3 and Pinia. Browse all Pokemon, filter by type
 |---|---|
 | [Vue 3](https://vuejs.org/) | UI framework (Composition API + `<script setup>`) |
 | [Pinia](https://pinia.vuejs.org/) | State management (favorites store) |
-| [Vue Router](https://router.vuejs.org/) | Client-side routing |
-| [Axios](https://axios-http.com/) | HTTP client for PokeAPI calls |
+| [Vue Router 5](https://router.vuejs.org/) | Client-side routing |
+| [Axios](https://axios-http.com/) | HTTP client |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [Vite](https://vite.dev/) | Dev server and build tool |
 | [PokeAPI](https://pokeapi.co/) | Public Pokemon REST API (no key required) |
 
@@ -27,28 +28,70 @@ A Pokedex web app built with Vue 3 and Pinia. Browse all Pokemon, filter by type
 
 ```
 src/
-├── components/       # Reusable UI components (PokemonCard, SearchFilter, NavBar, ...)
-├── composables/      # usePokemon — fetch, filter, and paginate logic
-├── services/         # api.ts (PokeAPI calls), pokemon.ts (data mapping)
-├── stores/           # favorites.ts — Pinia store for saved Pokemon
-├── types/            # TypeScript models and API response types
-├── views/            # Page-level components (PokemonScreen, PokemonDetailScreen, ...)
-└── router/           # Route definitions
+├── components/           # Shared reusable UI components
+│   ├── Chip.vue          # Selection pill/badge
+│   ├── NavBar.vue        # Top navigation with search
+│   ├── PokeHeader.vue    # Pokemon image header ring
+│   ├── PokemonStat.vue   # Stat progress bars
+│   ├── TypeBadge.vue     # Pokemon type pill
+│   └── ...
+├── composables/          # Stateful logic (fetch, filter, detail)
+│   ├── usePokemon.ts
+│   ├── usePokemonDetail.ts
+│   └── usePokemonFilter.ts
+├── constants/            # Static maps (type → color)
+├── layouts/              # App shell (NavBar + RouterView)
+├── router/               # Route definitions
+├── services/             # Data layer
+│   ├── api.ts            # Raw PokeAPI HTTP calls (Axios)
+│   └── pokemon.ts        # Maps API responses to UI models
+├── stores/               # Pinia stores
+│   └── favorites.ts
+├── types/                # TypeScript interfaces and enums
+│   ├── models.ts         # UI-facing types (Pokemon, MoveData, ...)
+│   └── api/              # PokeAPI response shapes
+├── usecases/             # Business logic (search, filter, fetch)
+│   └── pokemon.ts
+├── utils/                # Pure helpers (color, string, asset path)
+└── views/                # Page-level components
+    ├── StartScreen.vue
+    ├── PokemonScreen/    # List view + search filter panel
+    └── PokemonDetail/    # Detail view (stats, moves, abilities)
+```
+
+## Routes
+
+| Path | Page |
+|---|---|
+| `/` | Start screen |
+| `/pokemon` | Pokemon list with search and filters |
+| `/pokemon/:id` | Pokemon detail |
+
+## Data Flow
+
+```
+PokeAPI
+  └── services/api.ts           Raw HTTP calls via Axios
+        └── services/pokemon.ts  Map API responses → UI models
+              └── usecases/pokemon.ts  Business logic (search, filter)
+                    └── composables/   Reactive state per view
+                          └── views/   Render UI
 ```
 
 ## Getting Started
 
-**Requirements:** Node 20.19+ or 22.12+
+**Requirements:** Node.js `^20.19.0` or `>=22.12.0`
 
-```sh
+```bash
 # Install dependencies
 npm install
 
-# Start dev server
+# Start dev server (http://localhost:5173)
 npm run dev
 
 # Build for production
 npm run build
-```
 
-The app will be available at `http://localhost:5173` by default.
+# Preview production build
+npm run preview
+```
