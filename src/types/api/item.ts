@@ -21,7 +21,7 @@ export interface ItemName {
   language: UrlData;
 }
 
-export interface PokemonItemApiData {
+export interface PokemonItemResponse {
   id: number;
   name: string;
   cost: number;

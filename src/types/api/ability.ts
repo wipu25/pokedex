@@ -1,7 +1,7 @@
 import type { UrlData } from "./common";
 import type { VerboseEffect } from "./move";
 
-export interface PokemonAbilityApiData {
+export interface PokemonAbilityResponse {
   id: number;
   name: string;
   is_main_series: boolean;

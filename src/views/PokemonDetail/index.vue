@@ -14,18 +14,8 @@ import { useFavoritesStore } from "../../stores/favorites";
 const route = useRoute();
 const router = useRouter();
 
-const {
-  rawDetail,
-  pokemon,
-  typeColor,
-  typeColorLight,
-  moves,
-  movesLoading,
-  abilities,
-  abilitiesLoading,
-  heldItems,
-  heldItemsLoading,
-} = usePokemonDetail(Number(route.params.id));
+const { pokemon, moves, abilities, heldItems, loading, typeColor, typeColorLight } =
+  usePokemonDetail(Number(route.params.id));
 
 const favoritesStore = useFavoritesStore();
 const isFavorite = computed(() => favoritesStore.isFavorite(pokemon.id));
@@ -76,13 +66,17 @@ function toggleFavorite() {
         <h1 class="poke-name">{{ pokemon.name }}</h1>
 
         <div class="type-badges">
-          <TypeBadge v-for="el in pokemon.types" :key="el" :type="String(el)" />
+          <TypeBadge
+            v-for="el in pokemon.types"
+            :key="el"
+            :type="String(el)"
+          />
         </div>
 
         <PokemonStat :stats="pokemon.stats" />
         <InfoRow
           :infoRowList="[
-            { label: 'Height', value: pokemon.height },
+            { label: 'Height', value: pokemon.height + ' cm' },
             { label: 'Weight', value: pokemon.weight },
             { label: 'Base Exp', value: pokemon.baseExperience },
           ]"
@@ -97,10 +91,10 @@ function toggleFavorite() {
       </div>
 
       <ContentSection
-        v-if="rawDetail.held_items.length"
+        v-if="pokemon.heldItems.length"
         title="Held Items"
         :count="heldItems.length"
-        :isLoading="heldItemsLoading"
+        :isLoading="loading"
         loadingText="Loading held items..."
       >
         <div class="abilities-list">
@@ -129,7 +123,7 @@ function toggleFavorite() {
       <ContentSection
         title="Abilities"
         :count="abilities.length"
-        :isLoading="abilitiesLoading"
+        :isLoading="loading"
         loadingText="Loading abilities..."
       >
         <div class="abilities-list">
@@ -152,7 +146,7 @@ function toggleFavorite() {
       <ContentSection
         title="Moves"
         :count="moves.length"
-        :isLoading="movesLoading"
+        :isLoading="loading"
         loadingText="Loading moves..."
       >
         <div class="content-grid">

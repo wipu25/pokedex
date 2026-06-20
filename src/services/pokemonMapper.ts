@@ -1,8 +1,8 @@
 import type {
-  PokemonDetail as ApiPokemonDetail,
-  PokemonMoveData,
-  PokemonAbilityApiData,
-  PokemonItemApiData,
+  PokemonDetailResponse,
+  PokemonMoveResponse,
+  PokemonAbilityResponse,
+  PokemonItemResponse,
 } from "../types/api";
 import {
   Element,
@@ -12,30 +12,29 @@ import {
   type AbilityData,
   type HeldItemData,
 } from "../types/models";
+import { toTitleCase } from "../utils/string";
 
-export function mapToPokemon(d: ApiPokemonDetail): Pokemon {
+export function mapToPokemon(d: PokemonDetailResponse): Pokemon {
   return {
     id: d.id,
     name: d.name.charAt(0).toUpperCase() + d.name.slice(1),
     image: d.sprites.other["official-artwork"].front_default,
     types: d.types.map((t) => t.type.name as Element),
     abilities: d.abilities.map((a) => a.ability.name),
-    height: d.height * 10 + " cm",
+    height: d.height * 10,
     weight: d.weight,
     stats: d.stats.map((s) => ({
-      name: s.stat.name
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase()),
+      name: toTitleCase(s.stat.name),
       value: s.base_stat,
     })),
   };
 }
 
-export function mapToMoveData(m: PokemonMoveData): MoveData {
+export function mapToMoveData(m: PokemonMoveResponse): MoveData {
   const enEffect = m.effect_entries.find((e) => e.language.name === "en");
   return {
     id: m.id,
-    name: m.name.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    name: toTitleCase(m.name),
     type: m.type.name,
     damageClass:
       m.damage_class.name === "status" ? "buff" : m.damage_class.name,
@@ -44,17 +43,15 @@ export function mapToMoveData(m: PokemonMoveData): MoveData {
     pp: m.pp,
     priority: m.priority,
     shortEffect: enEffect?.short_effect ?? "",
-    target: m.target.name
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase()),
+    target: toTitleCase(m.target.name),
   };
 }
 
-export function mapToHeldItemData(item: PokemonItemApiData): HeldItemData {
+export function mapToHeldItemData(item: PokemonItemResponse): HeldItemData {
   const enEffect = item.effect_entries.find((e) => e.language.name === "en");
   return {
     id: item.id,
-    name: item.name.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    name: toTitleCase(item.name),
     image: item.sprites.default,
     effect: enEffect?.effect ?? "",
     flingPower: item.fling_power,
@@ -63,19 +60,19 @@ export function mapToHeldItemData(item: PokemonItemApiData): HeldItemData {
 }
 
 export function mapToAbilityData(
-  a: PokemonAbilityApiData,
+  a: PokemonAbilityResponse,
   isHidden: boolean,
 ): AbilityData {
   const enEffect = a.effect_entries.find((e) => e.language.name === "en");
   return {
     id: a.id,
-    name: a.name.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    name: toTitleCase(a.name),
     isHidden,
     effect: enEffect?.effect ?? "",
   };
 }
 
-export function mapToPokemonDetail(d: ApiPokemonDetail): PokemonDetail {
+export function mapToPokemonDetail(d: PokemonDetailResponse): PokemonDetail {
   return {
     ...mapToPokemon(d),
     baseExperience: d.base_experience,

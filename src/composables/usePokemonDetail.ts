@@ -1,68 +1,48 @@
 import { computed, ref, onMounted } from "vue";
-import { getCachedPokemon } from "./usePokemon";
-import {
-  mapToPokemonDetail,
-  mapToMoveData,
-  mapToAbilityData,
-  mapToHeldItemData,
-} from "../services/pokemon";
-import { getMove, getAbility, getItem } from "../services/api";
+import { getPokemonById } from "../repositories/pokemonRepository";
+import { getPokemonMoves, getPokemonAbilities, getPokemonHeldItems } from "../usecases/pokemonDetail";
+import { mapToPokemonDetail } from "../services/pokemonMapper";
 import { getElementColor, hexToRgba } from "../utils/color";
 import type { MoveData, AbilityData, HeldItemData } from "../types/models";
 
 export function usePokemonDetail(id: number) {
-  const rawDetail = getCachedPokemon(id)!;
-  const pokemon = mapToPokemonDetail(rawDetail);
+  const raw = getPokemonById(id)!;
+  const pokemon = mapToPokemonDetail(raw);
 
   const typeColor = computed(() => getElementColor(String(pokemon.types[0])));
   const typeColorLight = computed(() => hexToRgba(typeColor.value, 0.15));
 
   const moves = ref<MoveData[]>([]);
-  const movesLoading = ref(true);
   const abilities = ref<AbilityData[]>([]);
-  const abilitiesLoading = ref(true);
   const heldItems = ref<HeldItemData[]>([]);
-  const heldItemsLoading = ref(true);
+  const loading = ref(true);
 
-  onMounted(async () => {
-    const moveIds = rawDetail.moves.map((m) =>
+  onMounted(() => {
+    const moveIds = raw.moves.map((m) =>
       Number(m.move.url.split("/").filter(Boolean).pop()),
     );
-    const abilityEntries = rawDetail.abilities;
-    const heldItemNames = rawDetail.held_items.map((h) => h.item.name);
-
-    const [moveResults, abilityResults, heldItemResults] = await Promise.all([
-      Promise.all(moveIds.map((id) => getMove(id))),
-      Promise.all(
-        abilityEntries.map((a) =>
-          getAbility(Number(a.ability.url.split("/").filter(Boolean).pop())),
-        ),
-      ),
-      Promise.all(heldItemNames.map((name) => getItem(name))),
-    ]);
-
-    moves.value = moveResults.map(mapToMoveData);
-    movesLoading.value = false;
-
-    abilities.value = abilityResults.map((a, i) =>
-      mapToAbilityData(a, abilityEntries[i].is_hidden),
+    const abilityIds = raw.abilities.map((a) =>
+      Number(a.ability.url.split("/").filter(Boolean).pop()),
     );
-    abilitiesLoading.value = false;
+    const abilityHidden = raw.abilities.map((a) => a.is_hidden);
+    const heldItemNames = raw.held_items.map((h) => h.item.name);
 
-    heldItems.value = heldItemResults.map(mapToHeldItemData);
-    heldItemsLoading.value = false;
+    const movesPromise = getPokemonMoves(moveIds).then((data) => { moves.value = data; });
+    const abilitiesPromise = getPokemonAbilities(abilityIds, abilityHidden).then((data) => { abilities.value = data; });
+    const heldItemsPromise = getPokemonHeldItems(heldItemNames).then((data) => { heldItems.value = data; });
+
+    Promise.all([movesPromise, abilitiesPromise, heldItemsPromise]).then(() => {
+      loading.value = false;
+    });
   });
 
   return {
-    rawDetail,
     pokemon,
+    moves,
+    abilities,
+    heldItems,
+    loading,
     typeColor,
     typeColorLight,
-    moves,
-    movesLoading,
-    abilities,
-    abilitiesLoading,
-    heldItems,
-    heldItemsLoading,
   };
 }

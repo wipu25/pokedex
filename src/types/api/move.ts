@@ -67,7 +67,7 @@ export interface MoveName {
   language: UrlData;
 }
 
-export interface PokemonMoveData {
+export interface PokemonMoveResponse {
   id: number;
   name: string;
   accuracy: number | null;

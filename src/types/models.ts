@@ -14,7 +14,7 @@ export interface Pokemon {
   image: string;
   types: Element[];
   abilities: string[];
-  height: string;
+  height: number;
   weight: number;
   stats: PokemonStatData[];
 }
@@ -82,6 +82,18 @@ export interface StatsData {
 export interface MinMaxStatData {
   min: number | null;
   max: number | null;
+}
+
+export enum FetchState {
+  Loading = "loading",
+  Success = "success",
+  Failed = "failed",
+}
+
+export interface PokemonListState {
+  pokemons: Pokemon[];
+  totalCount: number;
+  state: FetchState;
 }
 
 export enum MinMax {

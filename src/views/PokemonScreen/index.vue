@@ -3,21 +3,22 @@ import { useRouter } from "vue-router";
 import PokemonCard from "./PokemonCard.vue";
 import SearchFilter from "./SearchFilter/index.vue";
 import { usePokemon } from "../../composables/usePokemon";
+import { usePokemonFilter } from "../../composables/usePokemonFilter";
+import { FetchState } from "../../types/models";
+import RetryState from "../../components/RetryState.vue";
 
 const {
   filterType,
   habitats,
   habitat,
-  pokemons,
-  loading,
   type,
   stats,
   onSelectedType,
   onSelectedHabitat,
   onUpdateStats,
   onClearAll,
-  totalCount,
-} = usePokemon();
+} = usePokemonFilter();
+const { pokemonListState, retry } = usePokemon(type, habitat, stats);
 
 const router = useRouter();
 
@@ -39,20 +40,37 @@ function goToDetail(id: number) {
       @update-stats="onUpdateStats"
       @clear-all="onClearAll"
     />
-    <div v-if="!loading" class="result-count">{{ totalCount }} results</div>
+    <div
+      v-if="pokemonListState.state === FetchState.Success"
+      class="result-count"
+    >
+      {{ pokemonListState.totalCount }} results
+    </div>
     <div class="grid">
       <PokemonCard
-        v-for="pokemon in pokemons"
+        v-for="pokemon in pokemonListState.pokemons"
         :key="pokemon.name"
         v-bind="pokemon"
         style="cursor: pointer"
         @click="goToDetail(pokemon.id)"
       />
     </div>
-    <div v-if="pokemons.length === 0 && loading == false" class="no-results">
+    <div
+      v-if="
+        pokemonListState.state === FetchState.Success &&
+        pokemonListState.pokemons.length === 0
+      "
+      class="no-results"
+    >
       No Pokemon Found
     </div>
-    <div v-if="loading" class="loading">Catching More Pokemon . . .</div>
+    <div v-if="pokemonListState.state === FetchState.Loading" class="loading">
+      Catching More Pokemon . . .
+    </div>
+    <RetryState
+      v-if="pokemonListState.state === FetchState.Failed"
+      @retry="retry"
+    />
   </div>
 </template>
 

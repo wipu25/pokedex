@@ -7,7 +7,7 @@ export interface HabitatName {
   language: UrlData;
 }
 
-export interface HabitatDetail {
+export interface HabitatDetailResponse {
   id: number;
   name: string;
   names: HabitatName[];

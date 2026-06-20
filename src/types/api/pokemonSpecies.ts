@@ -31,7 +31,7 @@ export interface SpeciesName {
   language: UrlData;
 }
 
-export interface PokemonSpecies {
+export interface PokemonSpeciesResponse {
   id: number;
   name: string;
   order: number;

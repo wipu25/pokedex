@@ -1,25 +1,15 @@
-import { getPokemonList, getPokemonDetail, getHabitatDetail, getPokemonSpecies } from "../services/api";
-import type { PokemonDetail } from "../types/api";
+import { fetchPokemonList, fetchHabitatPokemonList } from "../repositories/pokemonRepository";
+import { mapToPokemon } from "../services/pokemonMapper";
 import type { Pokemon, StatsData } from "../types/models";
 
-export async function fetchPokemons(query: string | null): Promise<PokemonDetail[]> {
-  const listData = await getPokemonList();
-  const results = query
-    ? listData.results.filter((p) => p.name.includes(query.toLowerCase()))
-    : listData.results;
-  return Promise.all(results.map((p) => getPokemonDetail(p.url)));
+export async function fetchPokemons(query: string | null): Promise<Pokemon[]> {
+  const details = await fetchPokemonList(query);
+  return details.map(mapToPokemon);
 }
 
-export async function fetchHabitatPokemons(query: string | null, habitat: string): Promise<PokemonDetail[]> {
-  const habitatDetail = await getHabitatDetail(habitat.toLowerCase());
-  const speciesList = await Promise.all(
-    habitatDetail.pokemon_species.map((s) => getPokemonSpecies(s.name))
-  );
-  const pokemonUrls = speciesList
-    .flatMap((s) => s.varieties.map((v) => v.pokemon))
-    .filter((p) => !query || p.name.includes(query.toLowerCase()))
-    .map((p) => p.url);
-  return Promise.all(pokemonUrls.map((url) => getPokemonDetail(url)));
+export async function fetchHabitatPokemons(query: string | null, habitat: string): Promise<Pokemon[]> {
+  const details = await fetchHabitatPokemonList(query, habitat);
+  return details.map(mapToPokemon);
 }
 
 export function matchesStatFilters(pokemon: Pokemon, stats: StatsData): boolean {
@@ -29,7 +19,7 @@ export function matchesStatFilters(pokemon: Pokemon, stats: StatsData): boolean 
 
     const value =
       key === "height"
-        ? parseFloat(pokemon.height)
+        ? pokemon.height
         : pokemon.stats.find((s) => s.name.toLowerCase().replace(/ /g, "_") === key)?.value;
 
     if (value == null) return false;

@@ -18,7 +18,7 @@
       </div>
 
       <PokemonStat :stats="stats" />
-      <InfoRow :infoRowList="[{ label: 'Height', value: height }, { label: 'Weight', value: weight }]" />
+      <InfoRow :infoRowList="[{ label: 'Height', value: height + ' cm' }, { label: 'Weight', value: weight }]" />
     </div>
   </div>
 </template>

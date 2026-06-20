@@ -44,7 +44,7 @@ export interface PokemonSprites {
   };
 }
 
-export interface PokemonDetail {
+export interface PokemonDetailResponse {
   id: number;
   name: string;
   order: number;

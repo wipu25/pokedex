@@ -1,36 +1,32 @@
-import axios from "axios";
-import type { PokemonDetail, ListResponse, Type, Habitat, HabitatDetail, PokemonSpecies, PokemonMoveData, PokemonAbilityApiData, PokemonItemApiData } from "../types/api";
+import type { PokemonDetailResponse, ListResponse, Type, Habitat, HabitatDetailResponse, PokemonSpeciesResponse, PokemonMoveResponse, PokemonAbilityResponse, PokemonItemResponse } from "../types/api";
+import httpClient from "./httpClient";
 
-const api = axios.create({
-  baseURL: "https://pokeapi.co/api/v2",
-});
-
-export const getPokemonDetail = (url: string): Promise<PokemonDetail> =>
-  axios.get(url).then((res) => res.data);
+export const getPokemonDetail = (url: string): Promise<PokemonDetailResponse> =>
+  httpClient.get(url).then((res) => res.data);
 
 export const getItemList = (limit: number, offset: number): Promise<ListResponse> =>
-  api.get("/item", { params: { limit, offset } }).then((res) => res.data);
+  httpClient.get("/item", { params: { limit, offset } }).then((res) => res.data);
 
 export const getPokemonList = (): Promise<ListResponse> =>
-  api.get("/pokemon", { params: { limit: 10000, offset: 0 } }).then((res) => res.data);
+  httpClient.get("/pokemon", { params: { limit: 10000, offset: 0 } }).then((res) => res.data);
 
 export const getType = (): Promise<ListResponse<Type>> =>
-  api.get("/type").then((res) => res.data);
+  httpClient.get("/type").then((res) => res.data);
 
 export const getHabitat = (): Promise<ListResponse<Habitat>> =>
-  api.get("/pokemon-habitat").then((res) => res.data);
+  httpClient.get("/pokemon-habitat").then((res) => res.data);
 
-export const getHabitatDetail = (name: string): Promise<HabitatDetail> =>
-  api.get(`/pokemon-habitat/${name}`).then((res) => res.data);
+export const getHabitatDetail = (name: string): Promise<HabitatDetailResponse> =>
+  httpClient.get(`/pokemon-habitat/${name}`).then((res) => res.data);
 
-export const getPokemonSpecies = (name: string): Promise<PokemonSpecies> =>
-  api.get(`/pokemon-species/${name}`).then((res) => res.data);
+export const getPokemonSpecies = (name: string): Promise<PokemonSpeciesResponse> =>
+  httpClient.get(`/pokemon-species/${name}`).then((res) => res.data);
 
-export const getMove = (id: number): Promise<PokemonMoveData> =>
-  api.get(`/move/${id}`).then((res) => res.data);
+export const getMove = (id: number): Promise<PokemonMoveResponse> =>
+  httpClient.get(`/move/${id}`).then((res) => res.data);
 
-export const getAbility = (id: number): Promise<PokemonAbilityApiData> =>
-  api.get(`/ability/${id}`).then((res) => res.data);
+export const getAbility = (id: number): Promise<PokemonAbilityResponse> =>
+  httpClient.get(`/ability/${id}`).then((res) => res.data);
 
-export const getItem = (name: string): Promise<PokemonItemApiData> =>
-  api.get(`/item/${name}`).then((res) => res.data);
+export const getItem = (name: string): Promise<PokemonItemResponse> =>
+  httpClient.get(`/item/${name}`).then((res) => res.data);
