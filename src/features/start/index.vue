@@ -1,15 +1,13 @@
 <script setup>
 import startBg from "@/assets/start_bg.webp";
+import en from "@/locales/en";
 </script>
 
 <template>
   <div class="container" :style="{ backgroundImage: `url(${startBg})` }">
     <div class="text-box">
-      <h1 class="header">PokeDex</h1>
-      <p class="description">
-        Encyclopedia of Pokemon where you explore all of Pokemon and their stats
-        !!
-      </p>
+      <h1 class="header">{{ en.start.title }}</h1>
+      <p class="description">{{ en.start.description }}</p>
     </div>
   </div>
 </template>

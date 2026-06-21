@@ -11,6 +11,7 @@ import TypeBadge from "@/shared/components/TypeBadge.vue";
 import { usePokemonDetail } from "./composables/usePokemonDetail";
 import { useFavoritesStore } from "@/shared/stores/favorites";
 import { FetchState } from "@/shared/types/models";
+import en from "@/locales/en";
 
 const route = useRoute();
 const router = useRouter();
@@ -51,10 +52,10 @@ function toggleFavorite() {
         <div class="sprite-row">
           <template
             v-for="[label, url] in [
-              ['Front', pokemonDetailState.pokemon.sprites.front_default],
-              ['Shiny', pokemonDetailState.pokemon.sprites.front_shiny],
-              ['Back', pokemonDetailState.pokemon.sprites.back_default],
-              ['Back Shiny', pokemonDetailState.pokemon.sprites.back_shiny],
+              [en.pokemonDetail.sprites.front, pokemonDetailState.pokemon.sprites.front_default],
+              [en.pokemonDetail.sprites.shiny, pokemonDetailState.pokemon.sprites.front_shiny],
+              [en.pokemonDetail.sprites.back, pokemonDetailState.pokemon.sprites.back_default],
+              [en.pokemonDetail.sprites.backShiny, pokemonDetailState.pokemon.sprites.back_shiny],
             ]"
             :key="label"
           >
@@ -84,12 +85,12 @@ function toggleFavorite() {
           <InfoRow
             :infoRowList="[
               {
-                label: 'Height',
+                label: en.pokemonDetail.info.height,
                 value: pokemonDetailState.pokemon.height + ' cm',
               },
-              { label: 'Weight', value: pokemonDetailState.pokemon.weight },
+              { label: en.pokemonDetail.info.weight, value: pokemonDetailState.pokemon.weight },
               {
-                label: 'Base Exp',
+                label: en.pokemonDetail.info.baseExp,
                 value: pokemonDetailState.pokemon.baseExperience,
               },
             ]"
@@ -97,7 +98,7 @@ function toggleFavorite() {
 
           <div class="debug-section">
             <div class="debug-row">
-              <span class="debug-label">Cry</span>
+              <span class="debug-label">{{ en.pokemonDetail.cry }}</span>
               <audio
                 :src="pokemonDetailState.pokemon.cry"
                 controls
@@ -109,10 +110,10 @@ function toggleFavorite() {
 
         <ContentSection
           v-if="pokemonDetailState.pokemon.heldItems.length"
-          title="Held Items"
+          :title="en.pokemonDetail.sections.heldItems"
           :count="pokemonDetailState.heldItems.length"
           :isLoading="pokemonDetailState.state === FetchState.Loading"
-          loadingText="Loading held items..."
+          :loadingText="en.pokemonDetail.loading.heldItems"
         >
           <div class="abilities-list">
             <DetailCard
@@ -138,10 +139,10 @@ function toggleFavorite() {
         </ContentSection>
 
         <ContentSection
-          title="Abilities"
+          :title="en.pokemonDetail.sections.abilities"
           :count="pokemonDetailState.abilities.length"
           :isLoading="pokemonDetailState.state === FetchState.Loading"
-          loadingText="Loading abilities..."
+          :loadingText="en.pokemonDetail.loading.abilities"
         >
           <div class="abilities-list">
             <DetailCard
@@ -153,7 +154,7 @@ function toggleFavorite() {
             >
               <template #cardTitleTrailing>
                 <span v-if="ability.isHidden" class="ability-hidden-chip"
-                  >Hidden</span
+                  >{{ en.pokemonDetail.hidden }}</span
                 >
               </template>
             </DetailCard>
@@ -161,10 +162,10 @@ function toggleFavorite() {
         </ContentSection>
 
         <ContentSection
-          title="Moves"
+          :title="en.pokemonDetail.sections.moves"
           :count="pokemonDetailState.moves.length"
           :isLoading="pokemonDetailState.state === FetchState.Loading"
-          loadingText="Loading moves..."
+          :loadingText="en.pokemonDetail.loading.moves"
         >
           <div class="content-grid">
             <DetailCard
@@ -190,9 +191,9 @@ function toggleFavorite() {
               <template #cardContent>
                 <InfoRow
                   :infoRowList="[
-                    { label: 'Power', value: move.power ?? '—' },
-                    { label: 'Accuracy', value: move.accuracy ?? '—' },
-                    { label: 'PP', value: move.pp },
+                    { label: en.pokemonDetail.info.power, value: move.power ?? '—' },
+                    { label: en.pokemonDetail.info.accuracy, value: move.accuracy ?? '—' },
+                    { label: en.pokemonDetail.info.pp, value: move.pp },
                   ]"
                 />
               </template>

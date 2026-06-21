@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { useFavoritesStore } from "../stores/favorites";
 import { getElementColor, hexToRgba } from "../utils/color";
+import en from "@/locales/en";
 
 defineProps({
   show: Boolean,
@@ -29,7 +30,7 @@ function typeColorLight(pokemon) {
   <div v-if="show" class="overlay" @click.self="emit('close')">
     <div class="dialog">
       <div class="dialog-top">
-        <h2 class="dialog-header">You have catch . . .</h2>
+        <h2 class="dialog-header">{{ en.favorites.title }}</h2>
         <button class="close-btn" @click="emit('close')" aria-label="Close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +50,7 @@ function typeColorLight(pokemon) {
       </div>
 
       <p v-if="favoritesStore.favoritePokemonList.length === 0" class="empty">
-        No favorites yet!
+        {{ en.favorites.empty }}
       </p>
 
       <div v-else class="pokemon-grid">

@@ -1,13 +1,14 @@
-<template>
-  <div class="retry-state">
-    <span class="retry-text">Error occurred, please try again</span>
-    <button class="retry-btn" @click="$emit('retry')">Retry</button>
-  </div>
-</template>
-
 <script setup lang="ts">
+import en from "@/locales/en";
 defineEmits<{ retry: [] }>();
 </script>
+
+<template>
+  <div class="retry-state">
+    <span class="retry-text">{{ en.retry.errorMessage }}</span>
+    <button class="retry-btn" @click="$emit('retry')">{{ en.retry.button }}</button>
+  </div>
+</template>
 
 <style scoped>
 .retry-state {

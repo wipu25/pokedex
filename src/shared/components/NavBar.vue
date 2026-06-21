@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import en from "@/locales/en";
 
 const showDropdown = ref(false);
 const route = useRoute();
@@ -34,7 +35,7 @@ function clearSearch() {
       <input
         class="search-input"
         type="text"
-        placeholder="Search Pokémon..."
+        :placeholder="en.nav.searchPlaceholder"
         :value="route.query.q ?? ''"
         @input="onSearch"
       />
@@ -42,7 +43,7 @@ function clearSearch() {
     </div>
 
     <div class="menu-section">
-      <RouterLink class="menu" to="/pokemon" @click="showDropdown = false">Pokemon</RouterLink>
+      <RouterLink class="menu" to="/pokemon" @click="showDropdown = false">{{ en.nav.pokemon }}</RouterLink>
       <!-- <RouterLink class="menu" to="/item" @click="showDropdown = false">Item</RouterLink> -->
       <!-- <div class="dropdown-wrapper">
         <button class="menu" @click="showDropdown = !showDropdown">Product</button>
