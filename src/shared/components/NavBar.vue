@@ -25,12 +25,29 @@ function clearSearch() {
 <template>
   <nav class="navbar">
     <RouterLink to="/">
-      <img class="logo" src="../assets/pokemonLogo.png" alt="logo" height="40" />
+      <img
+        class="logo"
+        src="@/assets/pokemon_logo.png"
+        alt="logo"
+        height="40"
+      />
     </RouterLink>
 
     <div v-if="isPokemonRoute" class="search-bar">
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+      <svg
+        class="search-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
       </svg>
       <input
         class="search-input"
@@ -39,11 +56,15 @@ function clearSearch() {
         :value="route.query.q ?? ''"
         @input="onSearch"
       />
-      <button v-if="route.query.q" class="clear-btn" @click="clearSearch">✕</button>
+      <button v-if="route.query.q" class="clear-btn" @click="clearSearch">
+        ✕
+      </button>
     </div>
 
     <div class="menu-section">
-      <RouterLink class="menu" to="/pokemon" @click="showDropdown = false">{{ en.nav.pokemon }}</RouterLink>
+      <RouterLink class="menu" to="/pokemon" @click="showDropdown = false">{{
+        en.nav.pokemon
+      }}</RouterLink>
       <!-- <RouterLink class="menu" to="/item" @click="showDropdown = false">Item</RouterLink> -->
       <!-- <div class="dropdown-wrapper">
         <button class="menu" @click="showDropdown = !showDropdown">Product</button>
@@ -109,7 +130,9 @@ function clearSearch() {
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .dropdown-item:hover {
@@ -128,7 +151,9 @@ function clearSearch() {
   gap: 8px;
   flex: 1;
   margin: 0 32px;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 
 .search-bar:focus-within {
@@ -167,7 +192,9 @@ function clearSearch() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .clear-btn:hover {
