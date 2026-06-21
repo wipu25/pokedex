@@ -42,6 +42,9 @@ body {
   --color-text-light: #888;
   --color-text-placeholder: #aaa;
 
+  /* Overlays (dark — for use on light/image backgrounds) */
+  --color-overlay-dark: rgba(0, 0, 0, 0.55);
+
   /* Overlays (white on colored backgrounds) */
   --color-overlay-sm: rgba(255, 255, 255, 0.2);
   --color-overlay-md: rgba(255, 255, 255, 0.35);
