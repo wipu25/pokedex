@@ -6,6 +6,7 @@ import { usePokemon } from "./composables/usePokemon";
 import { usePokemonFilter } from "./composables/usePokemonFilter";
 import { FetchState } from "@/shared/types/models";
 import RetryState from "@/shared/components/RetryState.vue";
+import en from "@/locales/en";
 
 const {
   filterType,
@@ -62,10 +63,22 @@ function goToDetail(id: number) {
       "
       class="no-results"
     >
-      No Pokemon Found
+      {{ en.pokemon.noResults }}
     </div>
-    <div v-if="pokemonListState.state === FetchState.Loading" class="loading">
-      Catching More Pokemon . . .
+    <div
+      v-if="pokemonListState.state === FetchState.Loading"
+      class="loading-initial"
+    >
+      {{ en.pokemon.initialLoading }}
+    </div>
+    <div
+      v-if="
+        pokemonListState.state === FetchState.Success &&
+        pokemonListState.pokemons.length < pokemonListState.totalCount
+      "
+      class="loading"
+    >
+      {{ en.pokemon.catchingMore }}
     </div>
     <RetryState
       v-if="pokemonListState.state === FetchState.Failed"
@@ -108,11 +121,20 @@ function goToDetail(id: number) {
   }
 }
 
+.loading-initial {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--color-text-light);
+}
+
 .loading {
   text-align: center;
   padding: 24px;
   font-size: 18px;
-  color: #888;
+  color: var(--color-text-light);
 }
 
 .no-results {

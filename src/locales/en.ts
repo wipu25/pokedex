@@ -15,6 +15,12 @@ const en = {
     button: "Retry",
   },
 
+  pokemon: {
+    initialLoading: "Loading Pokemon Database . . .",
+    catchingMore: "Catching More Pokemon . . .",
+    noResults: "No Pokemon Found",
+  },
+
   favorites: {
     title: "You have catch . . .",
     empty: "No favorites yet!",
