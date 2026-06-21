@@ -33,7 +33,7 @@ import speedIcon from "../../assets/abilities/speed.png";
 import specialIcon from "../../assets/abilities/special.png";
 import { PokemonStatData } from "@/shared/types/models";
 
-defineProps<{ stats: PokemonStatData[] }>();
+defineProps<{ stats: readonly PokemonStatData[] }>();
 
 const STAT_ICONS: Record<string, string> = {
   Hp: hpIcon,

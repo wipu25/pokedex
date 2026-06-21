@@ -7,7 +7,9 @@ import {
 } from "../usecases/pokemon";
 import { Element, FetchState } from "@/shared/types/models";
 import type { Ref } from "vue";
-import type { Pokemon, PokemonListState, StatsData } from "@/shared/types/models";
+import type { PokemonData } from "@/shared/types/models";
+import type { PokemonListState } from "../types/pokemonListState";
+import type { StatsData } from "../types/stats";
 
 export function usePokemon(
   type: Ref<Element>,
@@ -16,7 +18,7 @@ export function usePokemon(
 ) {
   const route = useRoute();
 
-  let fetchedList: Pokemon[] = [];
+  let fetchedList: PokemonData[] = [];
   const pokemonListState = ref<PokemonListState>({
     pokemons: [],
     totalCount: 0,

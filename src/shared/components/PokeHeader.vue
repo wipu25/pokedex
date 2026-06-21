@@ -4,7 +4,7 @@
     <span class="poke-id">#{{ String(id).padStart(3, "0") }}</span>
     <button
       class="icon-btn"
-      @click="emit('toggleFavorite')"
+      @click.stop="emit('toggleFavorite')"
       :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
     >
       <span :class="['star', { 'star--active': isFavorite }]">★</span>

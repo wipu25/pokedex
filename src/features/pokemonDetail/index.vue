@@ -10,17 +10,23 @@ import PokeHeader from "@/shared/components/PokeHeader.vue";
 import TypeBadge from "@/shared/components/TypeBadge.vue";
 import { usePokemonDetail } from "./composables/usePokemonDetail";
 import { useFavoritesStore } from "@/shared/stores/favorites";
+import { FetchState } from "@/shared/types/models";
 
 const route = useRoute();
 const router = useRouter();
-
-const { pokemon, moves, abilities, heldItems, loading, typeColor, typeColorLight } =
-  usePokemonDetail(Number(route.params.id));
+const { pokemonDetailState, typeColor, typeColorLight } = usePokemonDetail(
+  Number(route.params.id),
+);
 
 const favoritesStore = useFavoritesStore();
-const isFavorite = computed(() => favoritesStore.isFavorite(pokemon.id));
+const isFavorite = computed(() =>
+  pokemonDetailState.value.pokemon
+    ? favoritesStore.isFavorite(pokemonDetailState.value.pokemon.id)
+    : false,
+);
 function toggleFavorite() {
-  favoritesStore.toggleFavorite(pokemon);
+  if (pokemonDetailState.value.pokemon)
+    favoritesStore.toggleFavorite(pokemonDetailState.value.pokemon.id);
 }
 </script>
 
@@ -29,160 +35,172 @@ function toggleFavorite() {
     class="screen"
     :style="{ '--type-color': typeColor, '--type-color-light': typeColorLight }"
   >
-    <PokeHeader
-      :id="pokemon.id"
-      :isFavorite="isFavorite"
-      :image="pokemon.image"
-      :name="pokemon.name"
-      size="lg"
-      showBack
-      @toggleFavorite="toggleFavorite"
-      @back="router.back()"
-    />
+    <template v-if="pokemonDetailState.pokemon">
+      <PokeHeader
+        :id="pokemonDetailState.pokemon.id"
+        :isFavorite="isFavorite"
+        :image="pokemonDetailState.pokemon.image"
+        :name="pokemonDetailState.pokemon.name"
+        size="lg"
+        showBack
+        @toggleFavorite="toggleFavorite"
+        @back="router.back()"
+      />
 
-    <div class="poke-body">
-      <div class="sprite-row">
-        <template
-          v-for="[label, url] in [
-            ['Front', pokemon.sprites.front_default],
-            ['Shiny', pokemon.sprites.front_shiny],
-            ['Back', pokemon.sprites.back_default],
-            ['Back Shiny', pokemon.sprites.back_shiny],
-          ]"
-          :key="label"
-        >
-          <div v-if="url" class="sprite-item">
-            <img
-              :src="url as string"
-              :alt="label as string"
-              class="sprite-img"
-            />
-            <span class="sprite-label">{{ label }}</span>
-          </div>
-        </template>
-      </div>
-
-      <div class="content">
-        <h1 class="poke-name">{{ pokemon.name }}</h1>
-
-        <div class="type-badges">
-          <TypeBadge
-            v-for="el in pokemon.types"
-            :key="el"
-            :type="String(el)"
-          />
-        </div>
-
-        <PokemonStat :stats="pokemon.stats" />
-        <InfoRow
-          :infoRowList="[
-            { label: 'Height', value: pokemon.height + ' cm' },
-            { label: 'Weight', value: pokemon.weight },
-            { label: 'Base Exp', value: pokemon.baseExperience },
-          ]"
-        />
-
-        <div class="debug-section">
-          <div class="debug-row">
-            <span class="debug-label">Cry</span>
-            <audio :src="pokemon.cry" controls style="width: 100%" />
-          </div>
-        </div>
-      </div>
-
-      <ContentSection
-        v-if="pokemon.heldItems.length"
-        title="Held Items"
-        :count="heldItems.length"
-        :isLoading="loading"
-        loadingText="Loading held items..."
-      >
-        <div class="abilities-list">
-          <DetailCard
-            v-for="item in heldItems"
-            :key="item.id"
-            :cardColor="typeColor"
-            :cardTitle="item.name"
-            :cardDescription="item.effect"
-            :cardIcon="item.image"
+      <div class="poke-body">
+        <div class="sprite-row">
+          <template
+            v-for="[label, url] in [
+              ['Front', pokemonDetailState.pokemon.sprites.front_default],
+              ['Shiny', pokemonDetailState.pokemon.sprites.front_shiny],
+              ['Back', pokemonDetailState.pokemon.sprites.back_default],
+              ['Back Shiny', pokemonDetailState.pokemon.sprites.back_shiny],
+            ]"
+            :key="label"
           >
-            <template #cardTitleTrailing>
-              <div v-if="item.flingPower !== null" class="held-item-fling">
-                <img
-                  src="/src/assets/abilities/attack.png"
-                  alt="attack"
-                  class="held-item-fling-icon"
-                />
-                <span class="held-item-fling-val">{{ item.flingPower }}</span>
-              </div>
-            </template>
-          </DetailCard>
-        </div>
-      </ContentSection>
-
-      <ContentSection
-        title="Abilities"
-        :count="abilities.length"
-        :isLoading="loading"
-        loadingText="Loading abilities..."
-      >
-        <div class="abilities-list">
-          <DetailCard
-            v-for="ability in abilities"
-            :key="ability.id"
-            :cardColor="typeColor"
-            :cardTitle="ability.name"
-            :cardDescription="ability.effect"
-          >
-            <template #cardTitleTrailing>
-              <span v-if="ability.isHidden" class="ability-hidden-chip"
-                >Hidden</span
-              >
-            </template>
-          </DetailCard>
-        </div>
-      </ContentSection>
-
-      <ContentSection
-        title="Moves"
-        :count="moves.length"
-        :isLoading="loading"
-        loadingText="Loading moves..."
-      >
-        <div class="content-grid">
-          <DetailCard
-            v-for="move in moves"
-            :key="move.id"
-            :cardColor="getElementColor(move.type)"
-            :cardTitle="move.name"
-            :cardDescription="move.shortEffect"
-          >
-            <template #cardTitleTrailing>
-              <div class="move-badges">
-                <TypeBadge :type="move.type" />
-                <span
-                  :class="[
-                    'move-class-chip',
-                    `move-class--${move.damageClass}`,
-                  ]"
-                >
-                  {{ move.damageClass }}
-                </span>
-              </div>
-            </template>
-            <template #cardContent>
-              <InfoRow
-                :infoRowList="[
-                  { label: 'Power', value: move.power ?? '—' },
-                  { label: 'Accuracy', value: move.accuracy ?? '—' },
-                  { label: 'PP', value: move.pp },
-                ]"
+            <div v-if="url" class="sprite-item">
+              <img
+                :src="url as string"
+                :alt="label as string"
+                class="sprite-img"
               />
-            </template>
-          </DetailCard>
+              <span class="sprite-label">{{ label }}</span>
+            </div>
+          </template>
         </div>
-      </ContentSection>
-    </div>
+
+        <div class="content">
+          <h1 class="poke-name">{{ pokemonDetailState.pokemon.name }}</h1>
+
+          <div class="type-badges">
+            <TypeBadge
+              v-for="el in pokemonDetailState.pokemon.types"
+              :key="el"
+              :type="String(el)"
+            />
+          </div>
+
+          <PokemonStat :stats="pokemonDetailState.pokemon.stats" />
+          <InfoRow
+            :infoRowList="[
+              {
+                label: 'Height',
+                value: pokemonDetailState.pokemon.height + ' cm',
+              },
+              { label: 'Weight', value: pokemonDetailState.pokemon.weight },
+              {
+                label: 'Base Exp',
+                value: pokemonDetailState.pokemon.baseExperience,
+              },
+            ]"
+          />
+
+          <div class="debug-section">
+            <div class="debug-row">
+              <span class="debug-label">Cry</span>
+              <audio
+                :src="pokemonDetailState.pokemon.cry"
+                controls
+                style="width: 100%"
+              />
+            </div>
+          </div>
+        </div>
+
+        <ContentSection
+          v-if="pokemonDetailState.pokemon.heldItems.length"
+          title="Held Items"
+          :count="pokemonDetailState.heldItems.length"
+          :isLoading="pokemonDetailState.state === FetchState.Loading"
+          loadingText="Loading held items..."
+        >
+          <div class="abilities-list">
+            <DetailCard
+              v-for="item in pokemonDetailState.heldItems"
+              :key="item.id"
+              :cardColor="typeColor"
+              :cardTitle="item.name"
+              :cardDescription="item.effect"
+              :cardIcon="item.image"
+            >
+              <template #cardTitleTrailing>
+                <div v-if="item.flingPower !== null" class="held-item-fling">
+                  <img
+                    src="/src/assets/abilities/attack.png"
+                    alt="attack"
+                    class="held-item-fling-icon"
+                  />
+                  <span class="held-item-fling-val">{{ item.flingPower }}</span>
+                </div>
+              </template>
+            </DetailCard>
+          </div>
+        </ContentSection>
+
+        <ContentSection
+          title="Abilities"
+          :count="pokemonDetailState.abilities.length"
+          :isLoading="pokemonDetailState.state === FetchState.Loading"
+          loadingText="Loading abilities..."
+        >
+          <div class="abilities-list">
+            <DetailCard
+              v-for="ability in pokemonDetailState.abilities"
+              :key="ability.id"
+              :cardColor="typeColor"
+              :cardTitle="ability.name"
+              :cardDescription="ability.effect"
+            >
+              <template #cardTitleTrailing>
+                <span v-if="ability.isHidden" class="ability-hidden-chip"
+                  >Hidden</span
+                >
+              </template>
+            </DetailCard>
+          </div>
+        </ContentSection>
+
+        <ContentSection
+          title="Moves"
+          :count="pokemonDetailState.moves.length"
+          :isLoading="pokemonDetailState.state === FetchState.Loading"
+          loadingText="Loading moves..."
+        >
+          <div class="content-grid">
+            <DetailCard
+              v-for="move in pokemonDetailState.moves"
+              :key="move.id"
+              :cardColor="getElementColor(move.type)"
+              :cardTitle="move.name"
+              :cardDescription="move.shortEffect"
+            >
+              <template #cardTitleTrailing>
+                <div class="move-badges">
+                  <TypeBadge :type="move.type" />
+                  <span
+                    :class="[
+                      'move-class-chip',
+                      `move-class--${move.damageClass}`,
+                    ]"
+                  >
+                    {{ move.damageClass }}
+                  </span>
+                </div>
+              </template>
+              <template #cardContent>
+                <InfoRow
+                  :infoRowList="[
+                    { label: 'Power', value: move.power ?? '—' },
+                    { label: 'Accuracy', value: move.accuracy ?? '—' },
+                    { label: 'PP', value: move.pp },
+                  ]"
+                />
+              </template>
+            </DetailCard>
+          </div>
+        </ContentSection>
+      </div>
+    </template>
   </div>
 </template>
 

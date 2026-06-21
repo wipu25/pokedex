@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { type StatsData, MinMax } from "@/shared/types/models";
+import { MinMax, type StatsData } from "../../types/stats";
 import { capitalize } from "@/shared/utils/string";
 import Chip from "@/shared/components/Chip.vue";
 

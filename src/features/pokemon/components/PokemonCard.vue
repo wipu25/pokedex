@@ -34,14 +34,14 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useFavoritesStore } from "@/shared/stores/favorites";
-import { type Pokemon } from "@/shared/types/models";
+import { type PokemonData } from "@/shared/types/models";
 import { getElementColor, hexToRgba } from "@/shared/utils/color";
 import PokemonStat from "@/shared/components/PokemonStat.vue";
 import InfoRow from "@/shared/components/InfoRow.vue";
 import TypeBadge from "@/shared/components/TypeBadge.vue";
 import PokeHeader from "@/shared/components/PokeHeader.vue";
 
-const props = defineProps<Pokemon>();
+const props = defineProps<PokemonData>();
 
 const typeColor = computed(() => getElementColor(String(props.types[0])));
 
@@ -51,7 +51,7 @@ const favoritesStore = useFavoritesStore();
 const isFavorite = computed(() => favoritesStore.isFavorite(props.id));
 
 function toggleFavorite() {
-  favoritesStore.toggleFavorite(props);
+  favoritesStore.toggleFavorite(props.id);
 }
 </script>
 

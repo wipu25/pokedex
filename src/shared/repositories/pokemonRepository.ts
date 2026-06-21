@@ -38,7 +38,6 @@ export async function fetchHabitatPokemonList(
   const speciesList = await Promise.all(
     habitatDetail.pokemon_species.map((s) => getPokemonSpecies(s.name)),
   );
-  console.log("Species list fetched:", speciesList);
   const names = speciesList
     .flatMap((s) => s.varieties.map((v) => v.pokemon))
     .filter((p) => !query || p.name.includes(query.toLowerCase()))
@@ -50,8 +49,11 @@ export async function fetchHabitatPokemonList(
   return details;
 }
 
-export function getPokemonById(id: number): PokemonDetailResponse | undefined {
-  return cache.get(id);
+export async function getPokemonById(id: number): Promise<PokemonDetailResponse> {
+  if (cache.has(id)) return cache.get(id)!;
+  const data = await getPokemonDetail(String(id));
+  cache.set(data.id, data);
+  return data;
 }
 
 export async function fetchMoves(

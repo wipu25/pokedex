@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { getPokemonList, getPokemonDetail, getItemList } from "@/shared/services/api";
-import type { ItemData } from "@/shared/types/models";
+import type { ItemData } from "./types/item";
 import ItemCard from "./components/ItemCard.vue";
 
 const itemData = ref<ItemData[]>([]);

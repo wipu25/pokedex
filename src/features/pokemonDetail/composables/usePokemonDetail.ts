@@ -1,47 +1,51 @@
-import { computed, ref, onMounted } from "vue";
-import { getPokemonById } from "@/shared/repositories/pokemonRepository";
-import { getPokemonMoves, getPokemonAbilities, getPokemonHeldItems } from "../usecases/pokemonDetail";
-import { mapToPokemonDetail } from "@/shared/services/pokemonMapper";
+import { computed, ref, onMounted, readonly } from "vue";
+import {
+  getPokemon,
+  getPokemonMoves,
+  getPokemonAbilities,
+  getPokemonHeldItems,
+} from "../usecases/pokemonDetail";
 import { getElementColor, hexToRgba } from "@/shared/utils/color";
-import type { MoveData, AbilityData, HeldItemData } from "@/shared/types/models";
+import { FetchState } from "@/shared/types/models";
+import type { PokemonDetailState } from "../types/pokemonDetailState";
 
 export function usePokemonDetail(id: number) {
-  const raw = getPokemonById(id)!;
-  const pokemon = mapToPokemonDetail(raw);
+  const pokemonDetailState = ref<PokemonDetailState>({
+    pokemon: null,
+    moves: [],
+    abilities: [],
+    heldItems: [],
+    state: FetchState.Loading,
+  });
 
-  const typeColor = computed(() => getElementColor(String(pokemon.types[0])));
+  const typeColor = computed(() =>
+    pokemonDetailState.value.pokemon
+      ? getElementColor(String(pokemonDetailState.value.pokemon.types[0]))
+      : "",
+  );
   const typeColorLight = computed(() => hexToRgba(typeColor.value, 0.15));
 
-  const moves = ref<MoveData[]>([]);
-  const abilities = ref<AbilityData[]>([]);
-  const heldItems = ref<HeldItemData[]>([]);
-  const loading = ref(true);
+  onMounted(async () => {
+    try {
+      const detail = await getPokemon(id);
+      const { moveIds, abilityIds, abilityHidden, ...pokemon } = detail;
 
-  onMounted(() => {
-    const moveIds = raw.moves.map((m) =>
-      Number(m.move.url.split("/").filter(Boolean).pop()),
-    );
-    const abilityIds = raw.abilities.map((a) =>
-      Number(a.ability.url.split("/").filter(Boolean).pop()),
-    );
-    const abilityHidden = raw.abilities.map((a) => a.is_hidden);
-    const heldItemNames = raw.held_items.map((h) => h.item.name);
+      pokemonDetailState.value.pokemon = pokemon;
 
-    const movesPromise = getPokemonMoves(moveIds).then((data) => { moves.value = data; });
-    const abilitiesPromise = getPokemonAbilities(abilityIds, abilityHidden).then((data) => { abilities.value = data; });
-    const heldItemsPromise = getPokemonHeldItems(heldItemNames).then((data) => { heldItems.value = data; });
+      const [moves, abilities, heldItems] = await Promise.all([
+        getPokemonMoves(moveIds),
+        getPokemonAbilities(abilityIds, abilityHidden),
+        getPokemonHeldItems(detail.heldItems),
+      ]);
 
-    Promise.all([movesPromise, abilitiesPromise, heldItemsPromise]).then(() => {
-      loading.value = false;
-    });
+      Object.assign(pokemonDetailState.value, { moves, abilities, heldItems, state: FetchState.Success });
+    } catch {
+      Object.assign(pokemonDetailState.value, { state: FetchState.Failed });
+    }
   });
 
   return {
-    pokemon,
-    moves,
-    abilities,
-    heldItems,
-    loading,
+    pokemonDetailState: readonly(pokemonDetailState),
     typeColor,
     typeColorLight,
   };

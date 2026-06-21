@@ -1,22 +1,45 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
-import type { Pokemon } from "../types/models";
+import { ref, watch } from "vue";
+import type { PokemonData } from "../types/models";
+import { getPokemonById } from "../repositories/pokemonRepository";
+import { mapToPokemon } from "../services/pokemonMapper";
+
+const STORAGE_KEY = "pokemon_favorites";
 
 export const useFavoritesStore = defineStore("favorites", () => {
-  const pokemonFavorites = ref<Pokemon[]>([]);
+  const stored = localStorage.getItem(STORAGE_KEY);
+  const pokemonFavorites = ref<number[]>(stored ? JSON.parse(stored) : []);
+  const favoritePokemonList = ref<PokemonData[]>([]);
 
-  function toggleFavorite(pokemon: Pokemon) {
-    const index = pokemonFavorites.value.findIndex((p) => p.id === pokemon.id);
+  async function loadFavorites() {
+    const results = await Promise.all(
+      pokemonFavorites.value.map(async (id) => {
+        const raw = await getPokemonById(id);
+        return mapToPokemon(raw);
+      }),
+    );
+    favoritePokemonList.value = results;
+  }
+
+  function toggleFavorite(id: number) {
+    const index = pokemonFavorites.value.indexOf(id);
     if (index === -1) {
-      pokemonFavorites.value.push(pokemon);
+      pokemonFavorites.value.push(id);
     } else {
       pokemonFavorites.value.splice(index, 1);
     }
   }
 
   function isFavorite(id: number): boolean {
-    return pokemonFavorites.value.some((p) => p.id === id);
+    return pokemonFavorites.value.includes(id);
   }
 
-  return { pokemonFavorites, toggleFavorite, isFavorite };
+  watch(pokemonFavorites, (val) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(val));
+    loadFavorites();
+  }, { deep: true });
+
+  loadFavorites();
+
+  return { pokemonFavorites, favoritePokemonList, toggleFavorite, isFavorite };
 });
