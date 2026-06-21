@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { type PokemonStatData } from "../types/models";
-import specialIcon from "../assets/abilities/special.png";
+import specialIcon from "@/assets/abilities/special.png";
 
 withDefaults(defineProps<{
   stat: PokemonStatData;

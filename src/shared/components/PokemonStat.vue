@@ -26,11 +26,11 @@
 
 <script setup lang="ts">
 import { STAT_COLORS } from "../constants/colors";
-import hpIcon from "../../assets/abilities/hp.png";
-import attackIcon from "../../assets/abilities/attack.png";
-import defenseIcon from "../../assets/abilities/defense.png";
-import speedIcon from "../../assets/abilities/speed.png";
-import specialIcon from "../../assets/abilities/special.png";
+import hpIcon from "@/assets/abilities/hp.png";
+import attackIcon from "@/assets/abilities/attack.png";
+import defenseIcon from "@/assets/abilities/defense.png";
+import speedIcon from "@/assets/abilities/speed.png";
+import specialIcon from "@/assets/abilities/special.png";
 import { PokemonStatData } from "@/shared/types/models";
 
 defineProps<{ stats: readonly PokemonStatData[] }>();

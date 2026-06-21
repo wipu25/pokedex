@@ -65,9 +65,13 @@ function typeColorLight(pokemon) {
           @click="navigateTo(pokemon.id)"
         >
           <div class="card-bg" />
-          <button
+          <div
             class="unfavorite-btn"
+            role="button"
+            tabindex="0"
             @click.stop="favoritesStore.toggleFavorite(pokemon.id)"
+            @keydown.enter.stop="favoritesStore.toggleFavorite(pokemon.id)"
+            @keydown.space.stop="favoritesStore.toggleFavorite(pokemon.id)"
             aria-label="Remove from favorites"
           >
             <svg
@@ -84,7 +88,7 @@ function typeColorLight(pokemon) {
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-          </button>
+          </div>
           <img :src="pokemon.image" :alt="pokemon.name" class="pokemon-img" />
           <span class="pokemon-name">{{ pokemon.name }}</span>
         </button>
