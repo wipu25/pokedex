@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { type StatsData, MinMax } from "@/types/models";
-import { capitalize } from "@/utils/string";
-import Chip from "@/components/Chip.vue";
+import { type StatsData, MinMax } from "@/shared/types/models";
+import { capitalize } from "@/shared/utils/string";
+import Chip from "@/shared/components/Chip.vue";
 
 const VALID_STAT = /[^0-9]/g;
 

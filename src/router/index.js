@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layouts/MainLayout.vue";
-import StartScreen from "../views/StartScreen.vue";
-import PokemonScreen from "../views/PokemonScreen/index.vue";
-import PokemonDetailScreen from "../views/PokemonDetail/index.vue";
+import StartScreen from "@/features/start/index.vue";
+import PokemonScreen from "@/features/pokemon/index.vue";
+import PokemonDetailScreen from "@/features/pokemonDetail/index.vue";
 
 const routes = [
   {

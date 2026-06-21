@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Card from '../../components/Card.vue';
+import Card from '@/shared/components/Card.vue';
 const props = defineProps({
   name: String,
   img_url: String

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import FavoritesDialog from "./components/FavoritesDialog.vue";
-import { useFavoritesStore } from "./stores/favorites";
+import FavoritesDialog from "./shared/components/FavoritesDialog.vue";
+import { useFavoritesStore } from "./shared/stores/favorites";
 
 
 const showDialog = ref(false);

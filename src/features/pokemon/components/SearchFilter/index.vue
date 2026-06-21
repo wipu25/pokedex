@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Habitat } from "../../../types/api";
-import { type StatsData, MinMax, Element } from "../../../types/models";
+import type { Habitat } from "@/shared/types/api";
+import { type StatsData, MinMax, Element } from "@/shared/types/models";
 import FilterButton from "./FilterButton.vue";
 import TypeFilter from "./TypeFilter.vue";
 import HabitatFilter from "./HabitatFilter.vue";

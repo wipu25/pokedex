@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import type { InfoRowData } from "../../types/models";
+import type { InfoRowData } from "@/shared/types/models";
 defineProps<{ infoRowList: InfoRowData[] }>();
 </script>
 

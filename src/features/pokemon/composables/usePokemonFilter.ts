@@ -1,8 +1,8 @@
 import { ref, onMounted } from "vue";
-import { getType, getHabitat } from "../services/api";
-import { Element, MinMax } from "../types/models";
-import type { StatsData } from "../types/models";
-import type { Habitat } from "../types/api";
+import { getType, getHabitat } from "@/shared/services/api";
+import { Element, MinMax } from "@/shared/types/models";
+import type { StatsData } from "@/shared/types/models";
+import type { Habitat } from "@/shared/types/api";
 
 export function usePokemonFilter() {
   const type = ref<Element>(Element.ALL);

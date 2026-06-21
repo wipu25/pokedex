@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import PokemonCard from "./PokemonCard.vue";
-import SearchFilter from "./SearchFilter/index.vue";
-import { usePokemon } from "../../composables/usePokemon";
-import { usePokemonFilter } from "../../composables/usePokemonFilter";
-import { FetchState } from "../../types/models";
-import RetryState from "../../components/RetryState.vue";
+import PokemonCard from "./components/PokemonCard.vue";
+import SearchFilter from "./components/SearchFilter/index.vue";
+import { usePokemon } from "./composables/usePokemon";
+import { usePokemonFilter } from "./composables/usePokemonFilter";
+import { FetchState } from "@/shared/types/models";
+import RetryState from "@/shared/components/RetryState.vue";
 
 const {
   filterType,

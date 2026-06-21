@@ -1,10 +1,10 @@
-import { fetchMoves, fetchAbilities, fetchHeldItems } from "../repositories/pokemonRepository";
+import { fetchMoves, fetchAbilities, fetchHeldItems } from "@/shared/repositories/pokemonRepository";
 import {
   mapToMoveData,
   mapToAbilityData,
   mapToHeldItemData,
-} from "../services/pokemonMapper";
-import type { MoveData, AbilityData, HeldItemData } from "../types/models";
+} from "@/shared/services/pokemonMapper";
+import type { MoveData, AbilityData, HeldItemData } from "@/shared/types/models";
 
 export async function getPokemonMoves(ids: number[]): Promise<MoveData[]> {
   const results = await fetchMoves(ids);

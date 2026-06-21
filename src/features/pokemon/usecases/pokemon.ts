@@ -1,6 +1,6 @@
-import { fetchPokemonList, fetchHabitatPokemonList } from "../repositories/pokemonRepository";
-import { mapToPokemon } from "../services/pokemonMapper";
-import type { Pokemon, StatsData } from "../types/models";
+import { fetchPokemonList, fetchHabitatPokemonList } from "@/shared/repositories/pokemonRepository";
+import { mapToPokemon } from "@/shared/services/pokemonMapper";
+import type { Pokemon, StatsData } from "@/shared/types/models";
 
 export async function fetchPokemons(query: string | null): Promise<Pokemon[]> {
   const details = await fetchPokemonList(query);

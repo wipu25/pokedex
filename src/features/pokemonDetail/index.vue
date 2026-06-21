@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getElementColor } from "../../utils/color";
-import PokemonStat from "../../components/PokemonStat.vue";
-import InfoRow from "../../components/InfoRow.vue";
-import DetailCard from "./DetailCard.vue";
-import ContentSection from "./ContentSection.vue";
-import PokeHeader from "../../components/PokeHeader.vue";
-import TypeBadge from "../../components/TypeBadge.vue";
-import { usePokemonDetail } from "../../composables/usePokemonDetail";
-import { useFavoritesStore } from "../../stores/favorites";
+import { getElementColor } from "@/shared/utils/color";
+import PokemonStat from "@/shared/components/PokemonStat.vue";
+import InfoRow from "@/shared/components/InfoRow.vue";
+import DetailCard from "./components/DetailCard.vue";
+import ContentSection from "./components/ContentSection.vue";
+import PokeHeader from "@/shared/components/PokeHeader.vue";
+import TypeBadge from "@/shared/components/TypeBadge.vue";
+import { usePokemonDetail } from "./composables/usePokemonDetail";
+import { useFavoritesStore } from "@/shared/stores/favorites";
 
 const route = useRoute();
 const router = useRouter();

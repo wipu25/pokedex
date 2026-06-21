@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Habitat } from "@/types/api";
-import { capitalize } from "@/utils/string";
-import Chip from "@/components/Chip.vue";
+import type { Habitat } from "@/shared/types/api";
+import { capitalize } from "@/shared/utils/string";
+import Chip from "@/shared/components/Chip.vue";
 
 defineProps<{
   habitats: Habitat[];

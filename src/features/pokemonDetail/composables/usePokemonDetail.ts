@@ -1,9 +1,9 @@
 import { computed, ref, onMounted } from "vue";
-import { getPokemonById } from "../repositories/pokemonRepository";
+import { getPokemonById } from "@/shared/repositories/pokemonRepository";
 import { getPokemonMoves, getPokemonAbilities, getPokemonHeldItems } from "../usecases/pokemonDetail";
-import { mapToPokemonDetail } from "../services/pokemonMapper";
-import { getElementColor, hexToRgba } from "../utils/color";
-import type { MoveData, AbilityData, HeldItemData } from "../types/models";
+import { mapToPokemonDetail } from "@/shared/services/pokemonMapper";
+import { getElementColor, hexToRgba } from "@/shared/utils/color";
+import type { MoveData, AbilityData, HeldItemData } from "@/shared/types/models";
 
 export function usePokemonDetail(id: number) {
   const raw = getPokemonById(id)!;

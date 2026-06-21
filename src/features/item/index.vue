@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { getPokemonList, getPokemonDetail, getItemList } from "../../services/api";
-import type { ItemData } from "../../types/models";
-import ItemCard from "./ItemCard.vue";
+import { getPokemonList, getPokemonDetail, getItemList } from "@/shared/services/api";
+import type { ItemData } from "@/shared/types/models";
+import ItemCard from "./components/ItemCard.vue";
 
 const itemData = ref<ItemData[]>([]);
 const offset = ref<number>(0);

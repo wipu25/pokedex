@@ -5,9 +5,9 @@ import {
   fetchHabitatPokemons,
   matchesStatFilters,
 } from "../usecases/pokemon";
-import { Element, FetchState } from "../types/models";
+import { Element, FetchState } from "@/shared/types/models";
 import type { Ref } from "vue";
-import type { Pokemon, PokemonListState, StatsData } from "../types/models";
+import type { Pokemon, PokemonListState, StatsData } from "@/shared/types/models";
 
 export function usePokemon(
   type: Ref<Element>,

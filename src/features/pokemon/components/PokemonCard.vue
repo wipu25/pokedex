@@ -1,5 +1,8 @@
 <template>
-  <div class="poke-card" :style="{ '--type-color': typeColor, '--type-color-light': typeColorLight }">
+  <div
+    class="poke-card"
+    :style="{ '--type-color': typeColor, '--type-color-light': typeColorLight }"
+  >
     <PokeHeader
       :id="id"
       :isFavorite="isFavorite"
@@ -18,20 +21,25 @@
       </div>
 
       <PokemonStat :stats="stats" />
-      <InfoRow :infoRowList="[{ label: 'Height', value: height + ' cm' }, { label: 'Weight', value: weight }]" />
+      <InfoRow
+        :infoRowList="[
+          { label: 'Height', value: height + ' cm' },
+          { label: 'Weight', value: weight },
+        ]"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useFavoritesStore } from "../../stores/favorites";
-import { type Pokemon } from "../../types/models";
-import { getElementColor, hexToRgba } from "../../utils/color";
-import PokemonStat from "../../components/PokemonStat.vue";
-import InfoRow from "../../components/InfoRow.vue";
-import TypeBadge from "../../components/TypeBadge.vue";
-import PokeHeader from "../../components/PokeHeader.vue";
+import { useFavoritesStore } from "@/shared/stores/favorites";
+import { type Pokemon } from "@/shared/types/models";
+import { getElementColor, hexToRgba } from "@/shared/utils/color";
+import PokemonStat from "@/shared/components/PokemonStat.vue";
+import InfoRow from "@/shared/components/InfoRow.vue";
+import TypeBadge from "@/shared/components/TypeBadge.vue";
+import PokeHeader from "@/shared/components/PokeHeader.vue";
 
 const props = defineProps<Pokemon>();
 
@@ -54,7 +62,9 @@ function toggleFavorite() {
   border-radius: 20px;
   background: var(--color-white);
   box-shadow: var(--shadow-card);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .poke-card:hover {
@@ -87,5 +97,4 @@ function toggleFavorite() {
   flex-wrap: wrap;
   justify-content: center;
 }
-
 </style>

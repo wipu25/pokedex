@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Element } from "@/types/models";
-import { getElementColor } from "@/utils/color";
-import { elementIcon } from "@/utils/asset";
-import { capitalize } from "@/utils/string";
-import Chip from "@/components/Chip.vue";
+import { Element } from "@/shared/types/models";
+import { getElementColor } from "@/shared/utils/color";
+import { elementIcon } from "@/shared/utils/asset";
+import { capitalize } from "@/shared/utils/string";
+import Chip from "@/shared/components/Chip.vue";
 
 defineProps<{
   filterType: Element[];
