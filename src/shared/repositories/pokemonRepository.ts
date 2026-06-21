@@ -24,7 +24,7 @@ export async function fetchPokemonList(
     ? listData.results.filter((p) => p.name.includes(query.toLowerCase()))
     : listData.results;
   const details = await Promise.all(
-    results.map((p) => getPokemonDetail(p.url)),
+    results.map((p) => getPokemonDetail(p.name)),
   );
   details.forEach((d) => cache.set(d.id, d));
   return details;
@@ -38,12 +38,14 @@ export async function fetchHabitatPokemonList(
   const speciesList = await Promise.all(
     habitatDetail.pokemon_species.map((s) => getPokemonSpecies(s.name)),
   );
-  const urls = speciesList
+  console.log("Species list fetched:", speciesList);
+  const names = speciesList
     .flatMap((s) => s.varieties.map((v) => v.pokemon))
     .filter((p) => !query || p.name.includes(query.toLowerCase()))
-    .map((p) => p.url);
-  console.log("Fetched habitat pokemons:", urls);
-  const details = await Promise.all(urls.map((url) => getPokemonDetail(url)));
+    .map((p) => p.name);
+  const details = await Promise.all(
+    names.map((name) => getPokemonDetail(name)),
+  );
   details.forEach((d) => cache.set(d.id, d));
   return details;
 }
