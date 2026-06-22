@@ -3,6 +3,10 @@
 A Pokémon encyclopedia web app built with Vue 3. Browse, search, and filter all Pokémon using data from the [PokeAPI](https://pokeapi.co/).
 
 ## Screenshots
+<img width="1906" height="963" alt="image" src="https://github.com/user-attachments/assets/650bd3d4-01c1-4cf2-8aed-181626a71c07" />
+<img width="1905" height="966" alt="image" src="https://github.com/user-attachments/assets/44dacccf-ae2c-4de0-af77-9fd7be4e1b38" />
+<img width="1907" height="963" alt="image" src="https://github.com/user-attachments/assets/6b1e9bf4-38e0-4408-958c-f371157c6adc" />
+<img width="1907" height="963" alt="image" src="https://github.com/user-attachments/assets/bfc4c598-fd15-4b0b-aa1d-da8e1244b5b2" />
 
 <!-- Add screenshots here -->
 
