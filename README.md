@@ -1,16 +1,22 @@
 # Pokedex
 
-A Pokemon encyclopedia web app built with Vue 3. Browse, search, and filter all Pokemon using data from the [PokeAPI](https://pokeapi.co/).
+A Pokémon encyclopedia web app built with Vue 3. Browse, search, and filter all Pokémon using data from the [PokeAPI](https://pokeapi.co/).
+
+## Screenshots
+
+<!-- Add screenshots here -->
 
 ## Features
 
-- **Search** — find Pokemon by name with live search
-- **Filter by type** — narrow results to a specific Pokemon type (Fire, Water, Grass, etc.)
-- **Filter by habitat** — browse Pokemon that live in caves, forests, seas, and more
+- **Search** — find Pokémon by name via the navbar search bar; redirects to the list if you're on a detail page
+- **Filter by type** — narrow results to a specific Pokémon type (Fire, Water, Grass, etc.)
+- **Filter by habitat** — browse Pokémon that live in caves, forests, seas, and more
 - **Filter by stats** — set min/max ranges for HP, Attack, Defense, Speed, Special Attack, Special Defense, and Height
-- **Infinite scroll** — results paginate as you scroll
-- **Favorites** — save Pokemon to a favorites list accessible from the nav bar
-- **Detail view** — full stats, sprites, moves, abilities, and held items for each Pokemon
+- **Infinite scroll** — results paginate automatically as you scroll down
+- **Back to top** — floating button appears after scrolling down 300px to jump back to the top
+- **Persistent filter state** — filters and scroll position are preserved when navigating to a detail page and back
+- **Favorites** — save Pokémon to a favorites list; count badge shown on the floating button
+- **Detail view** — full stats, sprites, moves, abilities, held items, and cry audio for each Pokémon
 
 ## Tech Stack
 
@@ -18,45 +24,63 @@ A Pokemon encyclopedia web app built with Vue 3. Browse, search, and filter all 
 |---|---|
 | [Vue 3](https://vuejs.org/) | UI framework (Composition API + `<script setup>`) |
 | [Pinia](https://pinia.vuejs.org/) | State management (favorites store) |
-| [Vue Router 5](https://router.vuejs.org/) | Client-side routing |
+| [Vue Router](https://router.vuejs.org/) | Client-side routing |
 | [Axios](https://axios-http.com/) | HTTP client |
 | [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [Vite](https://vite.dev/) | Dev server and build tool |
-| [PokeAPI](https://pokeapi.co/) | Public Pokemon REST API (no key required) |
+| [PokeAPI](https://pokeapi.co/) | Public Pokémon REST API (no key required) |
 
 ## Project Structure
 
 ```
 src/
-├── components/           # Shared reusable UI components
-│   ├── Chip.vue          # Selection pill/badge
-│   ├── NavBar.vue        # Top navigation with search
-│   ├── PokeHeader.vue    # Pokemon image header ring
-│   ├── PokemonStat.vue   # Stat progress bars
-│   ├── TypeBadge.vue     # Pokemon type pill
-│   └── ...
-├── composables/          # Stateful logic (fetch, filter, detail)
-│   ├── usePokemon.ts
-│   ├── usePokemonDetail.ts
-│   └── usePokemonFilter.ts
-├── constants/            # Static maps (type → color)
-├── layouts/              # App shell (NavBar + RouterView)
-├── router/               # Route definitions
-├── services/             # Data layer
-│   ├── api.ts            # Raw PokeAPI HTTP calls (Axios)
-│   └── pokemon.ts        # Maps API responses to UI models
-├── stores/               # Pinia stores
-│   └── favorites.ts
-├── types/                # TypeScript interfaces and enums
-│   ├── models.ts         # UI-facing types (Pokemon, MoveData, ...)
-│   └── api/              # PokeAPI response shapes
-├── usecases/             # Business logic (search, filter, fetch)
-│   └── pokemon.ts
-├── utils/                # Pure helpers (color, string, asset path)
-└── views/                # Page-level components
-    ├── StartScreen.vue
-    ├── PokemonScreen/    # List view + search filter panel
-    └── PokemonDetail/    # Detail view (stats, moves, abilities)
+├── features/
+│   ├── pokemon/                  # List screen
+│   │   ├── components/
+│   │   │   ├── PokemonCard.vue
+│   │   │   └── SearchFilter/     # Type, habitat, and stats filter panel
+│   │   ├── composables/
+│   │   │   ├── usePokemon.ts     # Fetch, pagination, scroll, back-to-top
+│   │   │   └── usePokemonFilter.ts
+│   │   ├── types/
+│   │   ├── usecases/
+│   │   └── index.vue
+│   ├── pokemonDetail/            # Detail screen
+│   │   ├── components/
+│   │   │   ├── ContentSection.vue
+│   │   │   └── DetailCard.vue
+│   │   ├── composables/
+│   │   │   └── usePokemonDetail.ts
+│   │   ├── types/
+│   │   ├── usecases/
+│   │   └── index.vue
+│   └── start/                    # Start / landing screen
+│       └── index.vue
+├── layouts/
+│   └── MainLayout.vue            # NavBar + keep-alive RouterView
+├── locales/
+│   └── en.ts                     # All UI strings
+├── router/
+│   └── index.js
+├── shared/
+│   ├── components/               # Reusable UI components
+│   │   ├── CustomFabButton.vue   # Floating action button (badge support)
+│   │   ├── FavoritesDialog.vue
+│   │   ├── NavBar.vue
+│   │   ├── PokeHeader.vue
+│   │   ├── PokemonStat.vue
+│   │   ├── TypeBadge.vue
+│   │   └── ...
+│   ├── constants/                # Static maps (type → color)
+│   ├── repositories/             # Data access (raw API calls → domain models)
+│   ├── services/                 # HTTP client, mappers
+│   ├── stores/
+│   │   └── favorites.ts          # Pinia store, persisted to localStorage
+│   ├── types/                    # Shared TypeScript interfaces and enums
+│   └── utils/                    # Pure helpers (color, string, asset path)
+├── App.vue
+├── style.css                     # Global CSS variables and base styles
+└── main.ts
 ```
 
 ## Routes
@@ -64,19 +88,23 @@ src/
 | Path | Page |
 |---|---|
 | `/` | Start screen |
-| `/pokemon` | Pokemon list with search and filters |
-| `/pokemon/:id` | Pokemon detail |
+| `/pokemon` | Pokémon list with search and filters |
+| `/pokemon/:id` | Pokémon detail |
 
 ## Data Flow
 
 ```
 PokeAPI
-  └── services/api.ts           Raw HTTP calls via Axios
-        └── services/pokemon.ts  Map API responses → UI models
-              └── usecases/pokemon.ts  Business logic (search, filter)
-                    └── composables/   Reactive state per view
-                          └── views/   Render UI
+  └── shared/services/api.ts            Raw HTTP calls via Axios
+        └── shared/repositories/        Map API responses → domain models
+              └── features/*/usecases/  Business logic (search, filter, fetch)
+                    └── features/*/composables/  Reactive state per screen
+                          └── features/*/index.vue  Render UI
 ```
+
+## Navigation & State
+
+The list screen (`/pokemon`) is wrapped in `<keep-alive>` inside `MainLayout`, so filter selections, search results, and scroll position are all preserved when navigating to a detail page and pressing back.
 
 ## Getting Started
 
@@ -95,3 +123,7 @@ npm run build
 # Preview production build
 npm run preview
 ```
+
+## Deployment
+
+The app is configured for [Vercel](https://vercel.com). The `vercel.json` rewrites all routes to `index.html` so client-side routing works on direct URL access and page refresh.
