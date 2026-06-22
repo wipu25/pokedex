@@ -1,4 +1,12 @@
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import {
+  ref,
+  watch,
+  onMounted,
+  onUnmounted,
+  onActivated,
+  onDeactivated,
+  nextTick,
+} from "vue";
 import { useRoute } from "vue-router";
 import {
   fetchPokemons,
@@ -19,12 +27,15 @@ export function usePokemon(
   const route = useRoute();
 
   let fetchedList: PokemonData[] = [];
+  let offset = 0;
+  let savedScrollY = 0;
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  const showBackToTop = ref(false);
   const pokemonListState = ref<PokemonListState>({
     pokemons: [],
     totalCount: 0,
     state: FetchState.Loading,
   });
-  let offset = 0;
 
   async function fetchPokemon(): Promise<void> {
     pokemonListState.value.state = FetchState.Loading;
@@ -41,9 +52,7 @@ export function usePokemon(
           ? result.filter((p) => p.types.includes(type.value))
           : result;
 
-      fetchedList = filtered.filter((p) =>
-        matchesStatFilters(p, stats.value),
-      );
+      fetchedList = filtered.filter((p) => matchesStatFilters(p, stats.value));
       offset = 0;
       pokemonListState.value = {
         pokemons: fetchedList.slice(0, 18),
@@ -60,8 +69,6 @@ export function usePokemon(
     deep: true,
   });
 
-  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-
   watch(
     () => route.query.q,
     (q) => {
@@ -75,17 +82,36 @@ export function usePokemon(
   );
 
   function onScroll() {
+    const shouldShow = window.scrollY > 300;
+    if (shouldShow !== showBackToTop.value) showBackToTop.value = shouldShow;
+
     const nearBottom =
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
     if (nearBottom) {
-      pokemonListState.value.pokemons.push(...fetchedList.slice(offset, offset + 18));
+      pokemonListState.value.pokemons.push(
+        ...fetchedList.slice(offset, offset + 18),
+      );
       offset += 18;
     }
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   onMounted(() => {
     fetchPokemon();
     window.addEventListener("scroll", onScroll);
+  });
+
+  onActivated(() => {
+    window.addEventListener("scroll", onScroll);
+    nextTick(() => window.scrollTo({ top: savedScrollY, behavior: "instant" }));
+  });
+
+  onDeactivated(() => {
+    savedScrollY = window.scrollY;
+    window.removeEventListener("scroll", onScroll);
   });
 
   onUnmounted(() => {
@@ -94,6 +120,8 @@ export function usePokemon(
 
   return {
     pokemonListState,
+    showBackToTop,
+    scrollToTop,
     retry: fetchPokemon,
   };
 }

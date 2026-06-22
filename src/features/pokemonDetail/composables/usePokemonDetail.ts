@@ -26,6 +26,7 @@ export function usePokemonDetail(id: number) {
   const typeColorLight = computed(() => hexToRgba(typeColor.value, 0.15));
 
   onMounted(async () => {
+    window.scrollTo({ top: 0, behavior: "instant" });
     try {
       const detail = await getPokemon(id);
       const { moveIds, abilityIds, abilityHidden, ...pokemon } = detail;

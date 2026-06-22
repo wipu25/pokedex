@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getElementColor } from "@/shared/utils/color";
 import PokemonStat from "@/shared/components/PokemonStat.vue";

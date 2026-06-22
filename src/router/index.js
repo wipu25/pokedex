@@ -11,9 +11,9 @@ const routes = [
     children: [
       { path: "", component: StartScreen },
       { path: "pokemon", component: PokemonScreen },
+      { path: "pokemon/:id", component: PokemonDetailScreen },
     ],
   },
-  { path: "/pokemon/:id", component: PokemonDetailScreen },
 ];
 
 export default createRouter({

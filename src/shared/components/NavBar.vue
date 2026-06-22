@@ -6,7 +6,7 @@ import en from "@/locales/en";
 const showDropdown = ref(false);
 const route = useRoute();
 const router = useRouter();
-const isPokemonRoute = computed(() => route.path === "/pokemon");
+const isPokemonRoute = computed(() => route.path.startsWith("/pokemon"));
 
 const VALID_SEARCH_RE = /[^a-zA-Z0-9-]/g;
 
@@ -14,11 +14,19 @@ function onSearch(e) {
   const raw = e.target.value;
   const q = raw.replace(VALID_SEARCH_RE, "");
   if (q !== raw) e.target.value = q;
-  router.replace({ query: q ? { q } : {} });
+  if (route.path !== "/pokemon") {
+    router.push({ path: "/pokemon", query: q ? { q } : {} });
+  } else {
+    router.replace({ query: q ? { q } : {} });
+  }
 }
 
 function clearSearch() {
-  router.replace({ query: {} });
+  if (route.path !== "/pokemon") {
+    router.push({ path: "/pokemon" });
+  } else {
+    router.replace({ query: {} });
+  }
 }
 </script>
 

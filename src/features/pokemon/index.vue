@@ -1,4 +1,5 @@
 <script setup lang="ts">
+defineOptions({ name: "PokemonScreen" });
 import { useRouter } from "vue-router";
 import PokemonCard from "./components/PokemonCard.vue";
 import SearchFilter from "./components/SearchFilter/index.vue";
@@ -6,6 +7,7 @@ import { usePokemon } from "./composables/usePokemon";
 import { usePokemonFilter } from "./composables/usePokemonFilter";
 import { FetchState } from "@/shared/types/models";
 import RetryState from "@/shared/components/RetryState.vue";
+import CustomFabButton from "@/shared/components/CustomFabButton.vue";
 import en from "@/locales/en";
 
 const {
@@ -19,7 +21,11 @@ const {
   onUpdateStats,
   onClearAll,
 } = usePokemonFilter();
-const { pokemonListState, retry } = usePokemon(type, habitat, stats);
+const { pokemonListState, showBackToTop, scrollToTop, retry } = usePokemon(
+  type,
+  habitat,
+  stats,
+);
 
 const router = useRouter();
 
@@ -84,6 +90,10 @@ function goToDetail(id: number) {
       v-if="pokemonListState.state === FetchState.Failed"
       @retry="retry"
     />
+
+    <CustomFabButton v-if="showBackToTop" class="back-to-top" @click="scrollToTop">
+      ↑
+    </CustomFabButton>
   </div>
 </template>
 
@@ -144,5 +154,12 @@ function goToDetail(id: number) {
   align-items: center;
   font-size: 20px;
   color: #888;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  z-index: 1000;
 }
 </style>

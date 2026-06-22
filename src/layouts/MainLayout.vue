@@ -5,7 +5,11 @@ import NavBar from "@/shared/components/NavBar.vue";
 <template>
   <div class="layout">
     <NavBar />
-    <RouterView class="page" />
+    <RouterView v-slot="{ Component }" class="page">
+      <keep-alive include="PokemonScreen">
+        <component :is="Component" />
+      </keep-alive>
+    </RouterView>
   </div>
 </template>
 
